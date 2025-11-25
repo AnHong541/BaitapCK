@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Thanh toán - An's Toy Store (backup)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+</head>
+<body class="with-sticky-footer">
+<header>
+    <div class="header-container">
+        <div class="logo" id="logo">AN TOY'S STORE</div>
+        <div style="flex:1"></div>
+        <div class="search-bar">
+            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Trangchu.html">Trang chủ</a></li>
+                <li><a href="TatcaSanpham.html">Sản phẩm</a></li>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+            </ul>
+        </nav>
+        <div class="auth-wrap">
+            <div class="auth-icon" id="authIcon"></div>
+            <div class="auth-popup" id="authPopup"></div>
+        </div>
+        <div class="cart-icon" id="cartIcon">🛒</div>
+    </div>
+</header>
+
+<main style="max-width:1100px;margin:100px auto;padding:0 1rem;">
+    <div class="page-grid">
+        <div class="page-main">
+            <h1>Thanh toán</h1>
+            <div id="checkoutArea">Đang tải...</div>
+        </div>
+        <aside class="page-aside">
+            <div class="summary-card" id="checkoutSummary">
+                <div class="summary-title">Chi tiết thanh toán</div>
+                <div class="summary-amount">0đ</div>
+                <div class="summary-actions"><button class="btn btn-primary" id="placeOrderBtn">Đặt hàng</button></div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Về An's Toys Store</h4>
+            <ul>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="#">Chính sách</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Hỗ trợ</h4>
+            <ul>
+                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                <li><a href="#">Đổi trả</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Theo dõi</h4>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">TikTok</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<!-- Backup snapshot created by assistant -->
+</body>
+</html>

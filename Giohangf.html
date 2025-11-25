@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Giỏ hàng - An's Toy Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+</head>
+<body class="with-sticky-footer">
+<header>
+    <div class="header-container">
+        <div class="logo" id="logo">AN TOY'S STORE</div>
+        <div style="flex:1"></div>
+        <div class="search-bar">
+            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Trangchu.html">Trang chủ</a></li>
+                <li><a href="TatcaSanpham.html">Sản phẩm</a></li>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+            </ul>
+        </nav>
+        <div class="auth-wrap">
+            <div class="auth-icon" id="authIcon"></div>
+            <div class="auth-popup" id="authPopup"></div>
+        </div>
+        <div class="cart-icon" id="cartIcon">🛒</div>
+    </div>
+</header>
+
+<main style="max-width:1100px;margin:100px auto;padding:0 1rem;">
+    <div class="page-grid">
+        <div class="page-main">
+            <h1>Giỏ hàng của bạn</h1>
+            <div id="cartArea">Đang tải...</div>
+        </div>
+        <aside class="page-aside">
+            <div class="summary-card" id="cartSummary">
+                <div class="summary-title">Tạm tính</div>
+                <div class="summary-amount">0đ</div>
+                <div class="summary-actions"><button class="btn btn-primary" id="checkoutBtn">Mua hàng (0)</button></div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Về An's Toys Store</h4>
+            <ul>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="#">Chính sách</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Hỗ trợ</h4>
+            <ul>
+                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                <li><a href="#">Đổi trả</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Theo dõi</h4>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">TikTok</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script>
+function renderCart() {
+    var cart = (window.SITE && SITE.getCart) ? SITE.getCart() : (JSON.parse(localStorage.getItem('cartItems')||'[]'));
+    var out = '';
+    var summary = '';
+    if (!cart || cart.length === 0) {
+        out = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">Giỏ hàng của bạn đang trống. <a href="TatcaSanpham.html">Mua sắm ngay</a></p></div>';
+        document.getElementById('cartArea').innerHTML = out;
+        // update summary
+        document.getElementById('cartSummary').querySelector('.summary-amount').textContent = '0đ';
+        document.getElementById('cartSummary').querySelector('#checkoutBtn').textContent = 'Mua hàng (0)';
+        return;
+    }
+    out = '<div class="cart-card"><table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:12px">Sản phẩm</th><th style="padding:12px">Giá</th><th style="padding:12px">Số lượng</th><th style="padding:12px">Tổng</th><th></th></tr></thead><tbody>';
+    var total = 0;
+    cart.forEach(function(it,idx){
+        var qty = it.qty || it.quantity || 1;
+        var line = (it.price || 0) * qty;
+        total += line;
+        out += '<tr data-idx="'+idx+'">'
+            + '<td style="padding:12px;vertical-align:middle;">' + (it.img? '<img src="'+it.img+'" style="width:64px;height:64px;object-fit:cover;margin-right:12px;vertical-align:middle;">':'') + '<strong>'+it.name+'</strong></td>'
+            + '<td style="padding:12px;vertical-align:middle;">'+(it.price||0).toLocaleString('vi-VN')+'đ</td>'
+            + '<td style="padding:12px;vertical-align:middle;">'
+            + '<button onclick="changeQty('+idx+', -1)" class="qty-btn">-</button>'
+            + ' <input type="number" id="qty_'+idx+'" value="'+qty+'" min="1" class="qty-input">'
+            + '<button onclick="changeQty('+idx+', 1)" class="qty-btn">+</button>'
+            + '</td>'
+            + '<td style="padding:12px;vertical-align:middle;">'+line.toLocaleString('vi-VN')+'đ</td>'
+            + '<td style="padding:12px;vertical-align:middle;"><button onclick="removeItem('+idx+')" class="btn btn-danger">Xóa</button></td>'
+            + '</tr>';
+    });
+    out += '</tbody></table></div>';
+    document.getElementById('cartArea').innerHTML = out;
+    // update summary card
+    var sumEl = document.getElementById('cartSummary');
+    if (sumEl) {
+        sumEl.querySelector('.summary-amount').textContent = total.toLocaleString('vi-VN') + 'đ';
+        var btn = sumEl.querySelector('#checkoutBtn');
+        if (btn) btn.textContent = 'Mua hàng ('+cart.length+')';
+        // wire checkout button
+        btn.onclick = function(){ localStorage.setItem('checkoutCart', JSON.stringify(cart)); window.location.href = 'ThanhToan.html'; };
+    }
+}
+
+function changeQty(idx, delta){
+    var cart = (window.SITE && SITE.getCart) ? SITE.getCart() : JSON.parse(localStorage.getItem('cartItems')||'[]');
+    if (!cart[idx]) return; 
+    var input = document.getElementById('qty_'+idx);
+    var val = parseInt(input.value)||1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+    cart[idx].qty = val; cart[idx].quantity = val;
+    if (window.SITE && SITE.setCart) SITE.setCart(cart); else localStorage.setItem('cartItems', JSON.stringify(cart));
+    if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+    renderCart();
+}
+
+function removeItem(idx){
+    var cart = (window.SITE && SITE.getCart) ? SITE.getCart() : JSON.parse(localStorage.getItem('cartItems')||'[]');
+    cart.splice(idx,1);
+    if (window.SITE && SITE.setCart) SITE.setCart(cart); else localStorage.setItem('cartItems', JSON.stringify(cart));
+    if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+    renderCart();
+}
+
+function proceedCheckout(){
+    var cart = (window.SITE && SITE.getCart) ? SITE.getCart() : JSON.parse(localStorage.getItem('cartItems')||'[]');
+    if (!cart || cart.length===0) return alert('Giỏ hàng trống');
+    localStorage.setItem('checkoutCart', JSON.stringify(cart));
+    window.location.href = 'ThanhToan.html';
+}
+
+// initialize
+document.addEventListener('DOMContentLoaded', function(){
+    if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+    renderCart();
+});
+</script>
+
+<script>
+// Header behaviors: cart count, search, logo and nav wiring
+document.addEventListener('DOMContentLoaded', function(){
+    var cartIcon = document.getElementById('cartIcon');
+    if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+    if (cartIcon) cartIcon.addEventListener('click', function(){ window.location.href = 'Giohangf.html'; });
+    var logo = document.getElementById('logo'); if (logo) logo.addEventListener('click', function(){ window.location.href = 'Trangchu.html'; });
+
+    // search
+    var searchInput = document.getElementById('siteSearchInput');
+    var searchResults = document.getElementById('siteSearchResults');
+    function renderSearchResults(results) {
+        if (!searchResults) return;
+        if (results.length === 0 || !searchInput.value.trim()) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">'+p.price.toLocaleString('vi-VN')+'đ</span></div>'; }).join('');
+        searchResults.style.display = 'block';
+    }
+    if (searchInput) {
+        searchInput.addEventListener('input', function(){ var val = searchInput.value.trim().toLowerCase(); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); }); renderSearchResults(results); });
+        document.addEventListener('click', function(e){ if (!searchResults.contains(e.target) && e.target !== searchInput) { searchResults.style.display='none'; } });
+        searchResults.addEventListener('click', function(e){ var item = e.target.closest('.search-result-item'); if (item) { var idx = parseInt(item.getAttribute('data-idx')); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var product = products[idx]; if (product) { localStorage.setItem('currentProduct', JSON.stringify(product)); window.location.href='TheSanpham.html'; } } });
+    }
+    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham.html'; };
+});
+</script>
+<script src="assets/js/hamburger.js"></script>
+
+</body>
+</html>

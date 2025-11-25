@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AN'S TOY STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+    <!-- Inline styles moved to assets/css/style.css -->
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">AN TOY'S STORE</div>
+            <div style="flex:1"></div>
+            <div class="search-bar">
+                <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+            </div>
+            <button class="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#home">Trang chủ</a></li>
+                    <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
+                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    
+                </ul>
+            </nav>
+                <div class="auth-wrap">
+                    <div class="auth-icon" id="authIcon"></div>
+                    <div class="auth-popup" id="authPopup"></div>
+                </div>
+                <div class="cart-icon">🛒</div>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var cartIcon = document.querySelector('.cart-icon');
+                var count = (window.SITE && SITE.recalcCartCount) ? SITE.recalcCartCount() : (localStorage.getItem('cartCount') || '0');
+                if (cartIcon) cartIcon.setAttribute('data-count', count);
+
+                // Search bar logic
+                var searchInput = document.getElementById('siteSearchInput');
+                var searchResults = document.getElementById('siteSearchResults');
+                function renderSearchResults(results) {
+                    if (!searchResults) return;
+                    if (results.length === 0 || !searchInput.value.trim()) {
+                        searchResults.style.display = 'none';
+                        searchResults.innerHTML = '';
+                        return;
+                    }
+                    searchResults.innerHTML = results.map(function(p, idx) {
+                        return `<div class="search-result-item" data-idx="${idx}">
+                            <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
+                            <span>${p.name}</span>
+                            <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                        </div>`;
+                    }).join('');
+                    searchResults.style.display = 'block';
+                }
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        var val = searchInput.value.trim().toLowerCase();
+                        var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                        var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); });
+                        renderSearchResults(results);
+                    });
+                    document.addEventListener('click', function(e){
+                        if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                            searchResults.style.display = 'none';
+                        }
+                    });
+                    searchResults.addEventListener('click', function(e){
+                        var item = e.target.closest('.search-result-item');
+                        if (item) {
+                            var idx = parseInt(item.getAttribute('data-idx'));
+                            var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                            var product = products[idx];
+                            if (product) {
+                                localStorage.setItem('currentProduct', JSON.stringify(product));
+                                window.location.href = 'TheSanpham.html';
+                            }
+                        }
+                    });
+                }
+
+                document.querySelectorAll('.products-grid .product-card').forEach(function(card) {
+                    var idx = parseInt(card.getAttribute('data-idx'));
+                    var btn = card.querySelector('.btn');
+                    if (btn) {
+                        btn.addEventListener('click', function(ev) {
+                            ev.stopPropagation();
+                            const product = (window.SITE && SITE.demoProducts) ? SITE.demoProducts[idx] : null;
+                            if (product && window.SITE && SITE.addToCart) {
+                                const newCount = SITE.addToCart(product, 1);
+                                if (cartIcon) cartIcon.setAttribute('data-count', newCount);
+                                btn.innerText = 'Đã thêm!';
+                                setTimeout(() => btn.innerText = 'Thêm vào giỏ hàng', 900);
+                            }
+                        });
+                    }
+                    // Make the whole card clickable except the button
+                    card.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('btn')) return;
+                        const product = (window.SITE && SITE.demoProducts) ? SITE.demoProducts[idx] : null;
+                        if (product) {
+                            localStorage.setItem('currentProduct', JSON.stringify(product));
+                            window.location.href = 'TheSanpham.html';
+                        }
+                    });
+                    // Set cursor pointer for card
+                    card.style.cursor = 'pointer';
+                });
+
+                if (cartIcon) {
+                    cartIcon.addEventListener('click', function() { window.location.href = 'Giohangf.html'; });
+                }
+                var allProductsMenu = document.getElementById('allProductsMenu');
+                if (allProductsMenu) {
+                    allProductsMenu.onclick = function(e) { e.preventDefault(); window.location.href = 'TatcaSanpham.html'; };
+                }
+                var heroBuyNowBtn = document.getElementById('heroBuyNowBtn');
+                if (heroBuyNowBtn) {
+                    heroBuyNowBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = 'TatcaSanpham.html';
+                    });
+                }
+            });
+            </script>
+        </div>
+    </header>
+
+    <!-- Hero Banner (background carousel) -->
+    <section class="hero">
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image: url('https://www.pixelstalk.net/wp-content/uploads/images1/Gundam-wallpaper-1920x1200-for-android.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('https://wallpapercave.com/wp/wp2736624.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('http://wallpapercave.com/wp/Xocd0u4.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('https://wallpapers.com/images/hd/mobile-suit-gundam-00-3fqkr8grbop4n2u4.jpg')"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Mô hình chất lượng cao</h1>
+            <p>Khám phá những sản phẩm mới nhất với giá ưu đãi</p>
+            <a href="#products" class="btn" id="heroBuyNowBtn">Mua Ngay</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Danh mục -->
+        <section class="categories">
+            <div class="category-card" data-category="HG">
+                <img src="C:\Users\anhon\Downloads\New folder (3)\assets\img\ảnh HG.png" alt="HG" class="category-img">
+                <h3>HG</h3>
+            </div>
+            <div class="category-card" data-category="RG">
+                <img src="C:\Users\anhon\Downloads\New folder (3)\assets\img\ảnh RG.png" alt="RG" class="category-img">
+                <h3>RG</h3>
+            </div>
+            <div class="category-card" data-category="MG">
+                <img src="C:\Users\anhon\Downloads\New folder (3)\assets\img\ảnh MG.png" alt="MG" class="category-img">
+                <h3>MG</h3>
+            </div>
+                <div class="category-card" data-category="EG">
+                    <img src="C:\Users\anhon\Downloads\New folder (3)\assets\img\ảnh Phụ kiện.png" alt="Phụ kiện" class="category-img">
+                    <h3>Phụ kiện</h3>
+            </div>
+        </section>
+
+        <!-- Sản phẩm nổi bật -->
+        <section class="featured">
+            <h2>Sản Phẩm Nổi Bật</h2>
+            <div class="products-grid">
+                <div class="product-card" data-idx="0">
+                    <img src="https://static.wikia.nocookie.net/gunplabuilders/images/a/aa/HGTWFM-Gundam-Aerial-box.jpg/revision/latest/scale-to-width-down/1000?cb=20221002145115" alt="HG Aerial">
+                    <div class="product-info">
+                        <h3>HG Aerial</h3>
+                        <div class="product-price">500.000đ <span class="product-old-price">600.000đ</span></div>
+                        <button class="btn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+                <div class="product-card" data-idx="1">
+                    <img src="https://static.wikia.nocookie.net/gunplabuilders/images/8/8b/HGGQ-RickDoms-box.png/revision/latest/scale-to-width-down/1000?cb=20251018032323" alt="HG Gaia's/Ortega's Rick Dom (GQ)">
+                    <div class="product-info">
+                        <h3>HG Gaia's/Ortega's Rick Dom (GQ)</h3>
+                        <div class="product-price">700.000đ <span class="product-old-price">800.000đ</span></div>
+                        <button class="btn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+                <div class="product-card" data-idx="2">
+                    <img src="https://static.wikia.nocookie.net/gunplabuilders/images/3/31/RG-Sazabi-box.jpg/revision/latest/scale-to-width-down/1000?cb=20190423124656" alt="RG Sazabi">
+                    <div class="product-info">
+                        <h3>RG Sazabi</h3>
+                        <div class="product-price">1.200.000đ</div>
+                        <button class="btn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+                <div class="product-card" data-idx="3">
+                    <img src="https://bandai-hobby.net/images/158_1718_s_b3ogk0hnas45eb4ymqe3uyl7uumy.jpg" alt="HG Hashmal">
+                    <div class="product-info">
+                        <h3>HG Hashmal</h3>
+                        <div class="product-price">900.000đ <span class="product-old-price">1.000.000đ</span></div>
+                        <button class="btn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <script>
+        // Sự kiện click cho từng category-card để chuyển trang và lưu danh mục
+        document.addEventListener('DOMContentLoaded', function() {
+            var categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var cat = card.getAttribute('data-category');
+                    // Lưu danh mục được chọn vào localStorage
+                    localStorage.setItem('selectedCategory', cat);
+                    window.location.href = 'TatcaSanpham.html';
+                });
+            });
+        });
+        </script>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Về An's Toys Store</h4>
+                <ul>
+                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    <li><a href="#">Chính sách</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Hỗ Trợ</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Theo Dõi Chúng Tôi</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <a class="floating-contact" href="tel:+84000000000" aria-label="Liên hệ">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <path fill="#ffffff" d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 01.95-.27c1.09.27 2.27.42 3.5.42a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.23.15 2.41.42 3.5a1 1 0 01-.27.95l-2.2 2.2z"/>
+        </svg>
+    </a>
+    <script>
+    // Background carousel for hero: cycle slides every 10s
+    document.addEventListener('DOMContentLoaded', function(){
+        var slides = document.querySelectorAll('.hero-slide');
+        if(!slides || slides.length < 2) return;
+        var current = 0;
+        var total = slides.length;
+        setInterval(function(){
+            slides[current].classList.remove('active');
+            current = (current + 1) % total;
+            slides[current].classList.add('active');
+        }, 10000); // 10000 ms = 10s
+    });
+    </script>
+    <script src="assets/js/hamburger.js"></script>
+    </body>
+</html>

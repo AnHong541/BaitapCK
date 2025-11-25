@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Thanh toán - An's Toy Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+</head>
+<body class="with-sticky-footer">
+<header>
+    <div class="header-container">
+        <div class="logo" id="logo">AN TOY'S STORE</div>
+        <div style="flex:1"></div>
+        <div class="search-bar">
+            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Trangchu.html">Trang chủ</a></li>
+                <li><a href="TatcaSanpham.html">Sản phẩm</a></li>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+            </ul>
+        </nav>
+        <div class="auth-wrap">
+            <div class="auth-icon" id="authIcon"></div>
+            <div class="auth-popup" id="authPopup"></div>
+        </div>
+        <div class="cart-icon" id="cartIcon">🛒</div>
+    </div>
+</header>
+
+<main style="max-width:1100px;margin:100px auto;padding:0 1rem;">
+    <div class="page-grid">
+        <div class="page-main">
+            <h1>Thanh toán</h1>
+            <div id="checkoutArea">Đang tải...</div>
+        </div>
+        <aside class="page-aside">
+            <div class="summary-card" id="checkoutSummary">
+                <div class="summary-title">Chi tiết thanh toán</div>
+                <div class="summary-amount">0đ</div>
+                <div class="summary-actions"><button class="btn btn-primary" id="placeOrderBtn">Đặt hàng</button></div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Về An's Toys Store</h4>
+            <ul>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="#">Chính sách</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Hỗ trợ</h4>
+            <ul>
+                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                <li><a href="#">Đổi trả</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Theo dõi</h4>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">TikTok</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Checkout page: render form + summary, coupon, validation, and order persistence
+;(function(){
+    var coupons = {
+        'GIAM10': { type: 'percent', value: 10 },
+        'GIAM50K': { type: 'fixed', value: 50000 }
+    };
+    var appliedCoupon = null;
+
+    function formatVND(n){ return (n||0).toLocaleString('vi-VN') + 'đ'; }
+
+    function getCheckoutItems(){
+        var items = JSON.parse(localStorage.getItem('checkoutCart') || '[]');
+        if (!items || items.length===0) items = (window.SITE && SITE.getCart) ? SITE.getCart() : JSON.parse(localStorage.getItem('cartItems')||'[]');
+        return items || [];
+    }
+
+    function renderCheckout(){
+        var items = getCheckoutItems();
+        var area = document.getElementById('checkoutArea');
+        if (!items || items.length === 0){
+            area.innerHTML = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">Không có sản phẩm để thanh toán. <a href="TatcaSanpham.html">Quay lại mua sắm</a></p></div>';
+            updateSummary(0,0);
+            return;
+        }
+
+        var leftHtml = '';
+        // Customer info
+        leftHtml += '<div class="checkout-card"><h3>Thông tin khách hàng</h3>'+
+            '<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">'
+            + '<input id="customerName" placeholder="Tên khách hàng *" style="flex:1 1 300px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<input id="customerPhone" placeholder="Số điện thoại *" style="flex:0 0 260px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '</div></div>';
+
+        // Address
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Hình thức nhận hàng</h3>'+
+            '<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">'
+            + '<div style="flex:1 1 48%"><input id="cityInput" list="cityDatalist" placeholder="Tỉnh/Thành phố *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<datalist id="cityDatalist"><option value="Hà Nội"><option value="Hồ Chí Minh"></datalist></div>'
+            + '<div style="flex:1 1 48%"><input id="wardInput" list="wardDatalist" placeholder="Phường/Xã *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<datalist id="wardDatalist"></datalist></div>'
+            + '</div>'
+            + '<div style="margin-top:12px"><input id="addressInput" placeholder="Địa chỉ nhận hàng *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></div>'
+            + '</div>';
+
+        // Product list
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Sản phẩm ('+items.length+')</h3>';
+        leftHtml += '<table style="width:100%;border-collapse:collapse;margin-top:12px"><thead><tr><th style="text-align:left;padding:12px">Sản phẩm</th><th style="padding:12px">Đơn giá</th><th style="padding:12px">Số lượng</th><th style="padding:12px">Thành tiền</th></tr></thead><tbody>';
+        var subtotal = 0;
+        items.forEach(function(it){
+            var qty = it.qty || it.quantity || 1;
+            var line = (it.price||0) * qty; subtotal += line;
+            leftHtml += '<tr><td style="padding:12px">'+(it.img?('<img src="'+it.img+'" style="width:56px;height:56px;object-fit:cover;margin-right:8px;vertical-align:middle">'):'')+' <strong>'+it.name+'</strong></td>';
+            leftHtml += '<td style="padding:12px">'+formatVND(it.price)+'</td>';
+            leftHtml += '<td style="padding:12px">x'+qty+'</td>';
+            leftHtml += '<td style="padding:12px">'+formatVND(line)+'</td></tr>';
+        });
+        leftHtml += '</tbody></table></div>';
+
+        // Payment methods
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Phương thức thanh toán</h3>'+
+            '<div style="margin-top:12px">'
+            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="cod" checked> Thanh toán khi nhận hàng</label>'
+            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="bank"> Chuyển khoản ngân hàng qua QR</label>'
+            + '</div></div>';
+
+        // Order note & coupon
+        leftHtml += '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px">';
+        leftHtml += '<div class="checkout-card" style="flex:1 1 60%"><h3>Ghi chú đơn hàng</h3><textarea id="orderNote" placeholder="Thêm ghi chú (tùy chọn)" style="width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></textarea></div>';
+        leftHtml += '<div style="flex:1 1 35%"><div class="checkout-card"><h3>Ưu đãi</h3><div style="display:flex;gap:8px;margin-top:12px"><input id="couponCode" placeholder="Nhập mã ưu đãi" style="flex:1;padding:10px;border-radius:6px;border:1px solid #e6e6e6"><button id="applyCouponBtn" class="btn" style="padding:10px 12px">Áp dụng</button></div><div id="couponMsg" style="margin-top:8px;color:#d9534f"></div></div></div>';
+        leftHtml += '</div>';
+
+        area.innerHTML = leftHtml;
+
+        // populate city/ward simple mapping and wire editable inputs
+        var wards = {
+            'Hà Nội': ['Hoàn Kiếm','Ba Đình','Đống Đa'],
+            'Hồ Chí Minh': ['Quận 1','Quận 3','Quận 7']
+        };
+        var cityInput = document.getElementById('cityInput');
+        var wardInput = document.getElementById('wardInput');
+        var wardDatalist = document.getElementById('wardDatalist');
+        // when city input changes (user types or picks), populate ward suggestions
+        cityInput.addEventListener('input', function(){
+            var v = cityInput.value || '';
+            wardDatalist.innerHTML = '';
+            (wards[v]||[]).forEach(function(w){ var opt = document.createElement('option'); opt.value = w; wardDatalist.appendChild(opt); });
+        });
+
+        // coupon
+        document.getElementById('applyCouponBtn').addEventListener('click', function(){
+            var code = (document.getElementById('couponCode').value||'').trim().toUpperCase();
+            if (!code) { document.getElementById('couponMsg').textContent = 'Vui lòng nhập mã.'; return; }
+            if (!coupons[code]) { document.getElementById('couponMsg').textContent = 'Mã không hợp lệ.'; appliedCoupon = null; updateSummary(subtotal,0); return; }
+            appliedCoupon = { code: code, data: coupons[code] };
+            document.getElementById('couponMsg').textContent = 'Áp dụng mã '+code+' thành công.';
+            updateSummary(subtotal, appliedCoupon);
+        });
+
+        // summary initial
+        updateSummary(subtotal, appliedCoupon);
+
+        // place order button wiring is handled in updateSummary
+    }
+
+    function calcDiscount(sub,total, coupon){
+        if (!coupon) return 0;
+        var d = 0; if (coupon.data.type === 'percent') d = Math.round(sub * coupon.data.value / 100);
+        if (coupon.data.type === 'fixed') d = coupon.data.value; return Math.min(d, sub);
+    }
+
+    function updateSummary(subtotal, coupon){
+        var sumEl = document.getElementById('checkoutSummary');
+        if (!sumEl) return;
+        var discount = calcDiscount(subtotal, subtotal, coupon);
+        var total = subtotal - discount;
+        sumEl.querySelector('.summary-amount').textContent = formatVND(total);
+        // show breakdown
+        sumEl.querySelector('.summary-title').textContent = 'Chi tiết thanh toán';
+        // create details area
+        var details = sumEl.querySelector('.summary-details');
+        if (!details){ details = document.createElement('div'); details.className='summary-details'; details.style.fontSize='14px'; details.style.color='#333'; details.style.marginTop='4px'; sumEl.insertBefore(details, sumEl.querySelector('.summary-actions')); }
+        details.innerHTML = '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Tổng tiền hàng</span><span>'+formatVND(subtotal)+'</span></div>' +
+                            '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Giảm</span><span>'+(discount?('-'+formatVND(discount)):'0đ')+'</span></div>' +
+                            '<div style="height:1px;background:#eee;margin:8px 0"></div>' +
+                            '<div style="display:flex;justify-content:space-between;font-weight:700;color:#e74c3c"><span>Tổng tiền thanh toán</span><span>'+formatVND(total)+'</span></div>';
+
+        // update place order button
+        var btn = sumEl.querySelector('#placeOrderBtn');
+        if (btn){
+            btn.textContent = 'Đặt hàng ('+ (getCheckoutItems().length) +')';
+            btn.onclick = function(){ submitOrder(subtotal, discount, coupon); };
+        }
+
+        // also update small checkout button in other pages if present
+        var otherBtn = document.getElementById('checkoutBtn'); if (otherBtn) otherBtn.textContent = 'Mua hàng ('+ getCheckoutItems().length +')';
+    }
+
+    function validatePhone(phone){ return /^0?\d{9,11}$/.test(phone); }
+
+    function submitOrder(subtotal, discount, coupon){
+        // collect fields
+        var name = (document.getElementById('customerName')||{}).value || '';
+        var phone = (document.getElementById('customerPhone')||{}).value || '';
+        var city = (document.getElementById('cityInput')||{}).value || '';
+        var ward = (document.getElementById('wardInput')||{}).value || '';
+        var addr = (document.getElementById('addressInput')||{}).value || '';
+        var note = (document.getElementById('orderNote')||{}).value || '';
+        var pay = (document.querySelector('input[name="payMethod"]:checked')||{}).value || '';
+        var agree = true; // if there's a checkbox, validate here (omitted in DOM)
+
+        if (!name.trim()) return alert('Vui lòng nhập tên người nhận.');
+        if (!validatePhone(phone)) return alert('Vui lòng nhập số điện thoại hợp lệ.');
+        if (!city) return alert('Vui lòng chọn tỉnh/thành phố.');
+        if (!ward) return alert('Vui lòng chọn phường/xã.');
+        if (!addr.trim()) return alert('Vui lòng nhập địa chỉ nhận hàng.');
+        if (!pay) return alert('Vui lòng chọn phương thức thanh toán.');
+
+        var items = getCheckoutItems();
+        var order = {
+            id: 'ORD-' + Date.now(),
+            date: new Date().toISOString(),
+            items: items,
+            customer: { name: name.trim(), phone: phone.trim(), city: city, ward: ward, address: addr.trim() },
+            note: note || '',
+            payment: pay,
+            coupon: coupon ? coupon.code : null,
+            subtotal: subtotal,
+            discount: discount,
+            total: subtotal - discount
+        };
+
+        // persist
+        var orders = JSON.parse(localStorage.getItem('orders')||'[]'); orders.push(order); localStorage.setItem('orders', JSON.stringify(orders));
+
+        // clear cart
+        localStorage.removeItem('checkoutCart'); localStorage.removeItem('cartItems');
+        if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+
+        alert('Đặt hàng thành công! Mã đơn: ' + order.id);
+        window.location.href = 'Trangchu.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+        renderCheckout();
+    });
+
+})();
+</script>
+</script>
+
+<script>
+// Header behaviors: cart count, search, logo and nav wiring
+document.addEventListener('DOMContentLoaded', function(){
+    var cartIcon = document.getElementById('cartIcon');
+    if (window.SITE && SITE.recalcCartCount) SITE.recalcCartCount();
+    if (cartIcon) cartIcon.addEventListener('click', function(){ window.location.href = 'Giohangf.html'; });
+    var logo = document.getElementById('logo'); if (logo) logo.addEventListener('click', function(){ window.location.href = 'Trangchu.html'; });
+
+    // search
+    var searchInput = document.getElementById('siteSearchInput');
+    var searchResults = document.getElementById('siteSearchResults');
+    function renderSearchResults(results) {
+        if (!searchResults) return;
+        if (results.length === 0 || !searchInput.value.trim()) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">'+p.price.toLocaleString('vi-VN')+'đ</span></div>'; }).join('');
+        searchResults.style.display = 'block';
+    }
+    if (searchInput) {
+        searchInput.addEventListener('input', function(){ var val = searchInput.value.trim().toLowerCase(); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); }); renderSearchResults(results); });
+        document.addEventListener('click', function(e){ if (!searchResults.contains(e.target) && e.target !== searchInput) { searchResults.style.display='none'; } });
+        searchResults.addEventListener('click', function(e){ var item = e.target.closest('.search-result-item'); if (item) { var idx = parseInt(item.getAttribute('data-idx')); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var product = products[idx]; if (product) { localStorage.setItem('currentProduct', JSON.stringify(product)); window.location.href='TheSanpham.html'; } } });
+    }
+
+    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham.html'; };
+});
+</script>
+<script src="assets/js/hamburger.js"></script>
+
+</body>
+</html>

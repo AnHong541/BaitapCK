@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất cả sản phẩm - Lona3h</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background:#f8f9fa;
+            color:#333;
+            line-height:1.6;
+        }
+        a { text-decoration:none; color:inherit; }
+
+        /* Header styles are centralized in assets/css/style.css */
+
+        /* Main layout */
+        main {
+            max-width:1200px;
+            margin:100px auto 3rem;
+            padding:0 1rem;
+            display:grid;
+            grid-template-columns:250px 1fr;
+            gap:2rem;
+        }
+
+        /* Sidebar lọc */
+        .sidebar {
+            background:#fff;
+            padding:1.5rem;
+            border-radius:10px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.05);
+            height:fit-content;
+            position:sticky;
+            top:100px;
+        }
+        .filter-group {
+            margin-bottom:2rem;
+        }
+        .filter-group h3 {
+            font-size:1.1rem;
+            margin-bottom:1rem;
+            color:#007bff;
+            border-bottom:2px solid #007bff;
+            padding-bottom:0.5rem;
+        }
+        .filter-group label {
+            display:block;
+            margin:0.7rem 0;
+            cursor:pointer;
+        }
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        .price-range input {
+            flex: 1 1 40%;
+            min-width: 0;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            min-height: 44px;
+        }
+        .price-range span {
+            flex: 0 0 auto;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 576px) {
+            .price-range {
+                flex-direction: column;
+                gap: 0.3rem;
+                align-items: stretch;
+            }
+            .price-range input {
+                width: 100%;
+            }
+        }
+        .price-actions {
+            margin-top: 0.6rem;
+            display: flex;
+            gap: 0.6rem;
+        }
+        .price-actions .btn {
+            flex: 1 1 0;
+            padding: 0.55rem 0.6rem;
+            font-size: 0.95rem;
+            width: auto;
+            margin: 0;
+        }
+        .price-actions .btn.outline {
+            background: #fff;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        /* Main content */
+        .products-header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:1.5rem;
+            flex-wrap:wrap;
+            gap:1rem;
+        }
+        .products-header h1 {
+            font-size:1.8rem;
+        }
+        .sort-select select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            min-height: 44px;
+            cursor: pointer;
+        }
+
+        /* Grid sản phẩm */
+        .products-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+            gap:1.5rem;
+        }
+        .product-card {
+            background:#fff;
+            border-radius:10px;
+            overflow:hidden;
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
+            transition:transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover {
+            transform:translateY(-8px);
+            box-shadow:0 12px 20px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width:100%;
+            height:240px;
+            object-fit:cover;
+        }
+        .product-info {
+            padding:1rem;
+        }
+        .product-info h3 {
+            font-size:1rem;
+            margin-bottom:0.5rem;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .price {
+            font-size:1.2rem;
+            font-weight:700;
+            color:#007bff;
+        }
+        .old-price {
+            text-decoration:line-through;
+            color:#999;
+            font-size:0.9rem;
+            margin-left:0.5rem;
+        }
+        .rating {
+            color:#ffc107;
+            font-size:0.9rem;
+            margin-top:0.4rem;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 0;
+            font-weight: 700;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Phân trang */
+        .pagination {
+            display:flex;
+            justify-content:center;
+            gap:0.5rem;
+            margin:3rem 0;
+        }
+        .pagination a {
+            padding:0.6rem 1rem;
+            border:1px solid #ddd;
+            border-radius:5px;
+            transition:0.3s;
+        }
+        .pagination a.active,
+        .pagination a:hover {
+            background:#007bff; color:#fff; border-color:#007bff; }
+
+        /* Footer styles are centralized in assets/css/style.css */
+
+        /* Responsive */
+        @media (max-width:992px) {
+            main { grid-template-columns:1fr; }
+            .sidebar { order:2; position:static; }
+        }
+        @media (max-width:576px) {
+            .products-grid { grid-template-columns:1fr 1fr; }
+            .products-header { flex-direction:column; align-items:flex-start; }
+            main { padding: 0 0.5rem; }
+            .sidebar { padding: 1rem; margin-bottom: 1.5rem; }
+        }
+        @media (max-width:400px) {
+            .products-grid { grid-template-columns:1fr; }
+            .product-card img { height: 180px; }
+            .product-info { padding: 0.8rem; }
+            .product-info h3 { font-size: 0.9rem; }
+            .price { font-size: 1rem; }
+        }
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            input[type="text"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 16px !important;
+                padding: 0.75rem !important;
+                min-height: 44px !important;
+            }
+            button,
+            .btn,
+            .pagination a {
+                min-height: 44px !important;
+                min-width: 44px !important;
+                padding: 0.75rem !important;
+                font-size: 1rem !important;
+            }
+            .search-bar { width: 100%; margin: 0.5rem 0; }
+            .filter-group label { padding: 0.5rem; }
+        }
+        /* Safe area support for notch screens */
+        @supports (padding: max(0px)) {
+            main {
+                padding-left: max(0.5rem, env(safe-area-inset-left));
+                padding-right: max(0.5rem, env(safe-area-inset-right));
+            }
+        }
+
+        /* Search bar styles */
+        .search-bar {
+            position:relative;
+            display:inline-block;
+            width:300px;
+            margin-left:1rem;
+        }
+        .search-bar input {
+            width:100%;
+            padding:0.6rem 2.5rem 0.6rem 1rem;
+            border:1px solid #ddd;
+            border-radius:5px;
+            font-size:1rem;
+            outline:none;
+            transition:border-color 0.3s;
+        }
+        .search-bar input:focus {
+            border-color:#007bff;
+        }
+        .search-results {
+            position:absolute;
+            top:100%;
+            left:0;
+            right:0;
+            background:#fff;
+            border:1px solid #ddd;
+            border-top:none;
+            border-radius:0 0 5px 5px;
+            z-index:1000;
+            max-height:300px;
+            overflow-y:auto;
+        }
+        .search-result-item {
+            padding:0.8rem 1rem;
+            display:flex;
+            align-items:center;
+            cursor:pointer;
+            transition:background 0.3s;
+        }
+        .search-result-item:hover {
+            background:#f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="header-container">
+        <div class="logo" id="logo">AN TOY'S STORE</div>
+    		<div style="flex:1"></div>
+    		<div class="search-bar">
+            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Trangchu.html">Trang chủ</a></li>
+                <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
+                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    
+            </ul>
+        </nav>
+        <div class="auth-wrap">
+            <div class="auth-icon" id="authIcon"></div>
+            <div class="auth-popup" id="authPopup"></div>
+        </div>
+        <div class="cart-icon" id="cartIcon">🛒</div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('logo').onclick = function() { window.location.href = 'Trangchu.html'; };
+        var cartIcon = document.getElementById('cartIcon');
+        var count = (window.SITE && SITE.recalcCartCount) ? SITE.recalcCartCount() : (localStorage.getItem('cartCount') || '0');
+        if (cartIcon) cartIcon.setAttribute('data-count', count);
+        cartIcon.onclick = function() {
+            window.location.href = 'Giohangf.html';
+        };
+        var allProductsMenu = document.getElementById('allProductsMenu');
+        if (allProductsMenu) {
+            allProductsMenu.onclick = function(e) {
+                e.preventDefault();
+                window.location.href = 'TatcaSanpham.html';
+            };
+        }
+        // Helper: derive a simple tag from product name (first token like HG, RG, MG)
+        function getTagFromName(name) {
+            if (!name) return '';
+            var first = name.split(' ')[0].toUpperCase();
+            if (['HG','RG','MG','EG'].includes(first)) return first;
+            // fallback: look for HG/RG/MG substring
+            if (name.indexOf('HG') !== -1) return 'HG';
+            if (name.indexOf('RG') !== -1) return 'RG';
+            if (name.indexOf('MG') !== -1) return 'MG';
+            return '';
+        }
+
+        // Render function that accepts a products array
+        function renderProducts(products, page=1, pageSize=6) {
+            var grid = document.querySelector('.products-grid');
+            if (!grid) return;
+            var html = '';
+            var startIdx = (page-1)*pageSize;
+            var endIdx = Math.min(startIdx+pageSize, products.length);
+            var pagedProducts = products.slice(startIdx, endIdx);
+            pagedProducts.forEach(function(p, idx) {
+                html += '<div class="product-card" data-idx="'+(startIdx+idx)+'">'
+                    + '<img src="'+p.img+'" alt="'+p.name+'">'
+                    + '<div class="product-info">'
+                        + '<h3>'+p.name+'</h3>'
+                        + '<div class="price">'+p.price.toLocaleString('vi-VN')+'đ' + (p.oldPrice ? (' <span class="old-price">'+p.oldPrice.toLocaleString('vi-VN')+'đ</span>') : '') + '</div>'
+                        + '<button class="btn" data-idx="'+(startIdx+idx)+'">Thêm vào giỏ hàng</button>'
+                    + '</div>'
+                + '</div>';
+            });
+            grid.innerHTML = html;
+
+            // Update header count and pagination
+            var headerTitle = document.querySelector('.products-header h1');
+            if (headerTitle) headerTitle.innerHTML = 'Tất cả sản phẩm ('+products.length+' sản phẩm)';
+            var pageCount = Math.ceil(products.length / pageSize);
+            var pagination = document.querySelector('.pagination');
+            if (pagination) {
+                let ph = '';
+                for (let i=1;i<=pageCount;i++) ph += '<a href="#"' + (i===page? ' class="active"':'' ) + '>'+i+'</a>';
+                if (pageCount>5) ph += '<span>...</span><a href="#">Next</a>';
+                pagination.innerHTML = ph;
+                // Pagination click handler
+                pagination.querySelectorAll('a').forEach(function(a, i){
+                    a.onclick = function(e){
+                        e.preventDefault();
+                        if (a.textContent === 'Next') {
+                            if (page < pageCount) renderProducts(products, page+1, pageSize);
+                        } else {
+                            var p = parseInt(a.textContent);
+                            if (!isNaN(p)) renderProducts(products, p, pageSize);
+                        }
+                        pagination.querySelectorAll('a').forEach(x=>x.classList.remove('active'));
+                        if (a.textContent !== 'Next') a.classList.add('active');
+                    };
+                });
+            }
+
+            // attach button handlers
+            grid.querySelectorAll('.btn').forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.stopPropagation();
+                    var idx = parseInt(this.getAttribute('data-idx'));
+                    var product = products[idx];
+                    if (product && window.SITE && SITE.addToCart) {
+                        var newCount = SITE.addToCart(product, 1);
+                        var cartIconEl = document.getElementById('cartIcon');
+                        if (cartIconEl) cartIconEl.setAttribute('data-count', newCount);
+                        this.innerText = 'Đã thêm!';
+                        setTimeout(()=> this.innerText = 'Thêm vào giỏ hàng', 900);
+                    }
+                });
+            });
+
+            grid.querySelectorAll('.product-card').forEach(function(card){
+                card.addEventListener('click', function(e){
+                    if (e.target.classList.contains('btn')) return;
+                    var idx = parseInt(card.getAttribute('data-idx'));
+                    var product = products[idx];
+                    if (product) {
+                        localStorage.setItem('currentProduct', JSON.stringify(product));
+                        window.location.href = 'TheSanpham.html';
+                    }
+                });
+            });
+        }
+
+        // Apply category filter, price range, and sort
+        function applyCategoryFilter(page = 1) {
+            var products = window.SITE && window.SITE.demoProducts ? window.SITE.demoProducts.slice() : [];
+            // Category/tag filter
+            var checked = document.querySelector('.sidebar .category-input:checked');
+            if (checked) {
+                var tag = checked.getAttribute('data-tag');
+                if (tag && tag !== 'ALL') {
+                    products = products.filter(function(p){ return getTagFromName(p.name) === tag; });
+                }
+            }
+
+            // Price range filter
+            function parsePriceInputRaw(elId) {
+                var el = document.getElementById(elId);
+                if (!el) return null;
+                var raw = (el.value || '').toString().replace(/\./g, '').replace(/[^0-9]/g, '');
+                if (!raw) return null;
+                var num = parseInt(raw, 10) || 0;
+                // If user entered a small shorthand (e.g. 100 -> 100.000), scale values < 1000
+                if (num > 0 && num < 1000) num = num * 1000;
+                return num;
+            }
+            var minPrice = parsePriceInputRaw('priceMin');
+            var maxPrice = parsePriceInputRaw('priceMax');
+            if (minPrice !== null) {
+                products = products.filter(function(p){ return (p.price || 0) >= minPrice; });
+            }
+            if (maxPrice !== null) {
+                products = products.filter(function(p){ return (p.price || 0) <= maxPrice; });
+            }
+
+            // Sort by dropdown
+            var sortSelect = document.querySelector('.sort-select select');
+            if (sortSelect) {
+                var sortVal = sortSelect.value;
+                if (sortVal === 'Mới nhất') {
+                    // Default: keep order
+                } else if (sortVal === 'Giá: Thấp → Cao') {
+                    products.sort(function(a,b){ return a.price - b.price; });
+                } else if (sortVal === 'Giá: Cao → Thấp') {
+                    products.sort(function(a,b){ return b.price - a.price; });
+                }
+            }
+
+            renderProducts(products, page, 6);
+        }
+
+        // expose for other scripts (price helpers) to call
+        window.applyCategoryFilter = applyCategoryFilter;
+
+        // initialize category inputs and handlers
+        (function initFilters(){
+            var sidebar = document.querySelector('.sidebar');
+            if (!sidebar) return;
+            // If selectedCategory was set by other pages, check matching input
+            var selectedCategory = localStorage.getItem('selectedCategory');
+            if (selectedCategory) {
+                var input = sidebar.querySelector('.category-input[data-tag="'+selectedCategory+'"]');
+                if (input) input.checked = true;
+                localStorage.removeItem('selectedCategory');
+                sidebar.scrollIntoView({behavior:'smooth'});
+                // Immediately filter after setting
+                applyCategoryFilter();
+            }
+
+            // make category inputs behave like radio (single selection)
+            var inputs = sidebar.querySelectorAll('.category-input');
+            inputs.forEach(function(inp){
+                inp.addEventListener('change', function(){
+                    if (this.checked) {
+                        inputs.forEach(function(other){ if (other !== inp) other.checked = false; });
+                    } else {
+                        // if none selected, default to ALL
+                        var any = Array.from(inputs).some(i=>i.checked);
+                        if (!any) {
+                            var all = sidebar.querySelector('.category-input[data-tag="ALL"]');
+                            if (all) all.checked = true;
+                        }
+                    }
+                    applyCategoryFilter();
+                });
+            });
+
+            // Sort select handler
+            var sortSelect = document.querySelector('.sort-select select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function(){
+                    applyCategoryFilter();
+                });
+            }
+
+            // initial render
+            applyCategoryFilter();
+        })();
+
+        // Search bar logic
+        var searchInput = document.getElementById('siteSearchInput');
+        var searchResults = document.getElementById('siteSearchResults');
+        function renderSearchResults(results) {
+            if (!searchResults) return;
+            if (results.length === 0 || !searchInput.value.trim()) {
+                searchResults.style.display = 'none';
+                searchResults.innerHTML = '';
+                return;
+            }
+            searchResults.innerHTML = results.map(function(p, idx) {
+                return `<div class="search-result-item" data-idx="${idx}">
+                    <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
+                    <span>${p.name}</span>
+                    <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                </div>`;
+            }).join('');
+            searchResults.style.display = 'block';
+        }
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                var val = searchInput.value.trim().toLowerCase();
+                var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); });
+                renderSearchResults(results);
+            });
+            document.addEventListener('click', function(e){
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.style.display = 'none';
+                }
+            });
+            searchResults.addEventListener('click', function(e){
+                var item = e.target.closest('.search-result-item');
+                if (item) {
+                    var idx = parseInt(item.getAttribute('data-idx'));
+                    var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                    var product = products[idx];
+                    if (product) {
+                        localStorage.setItem('currentProduct', JSON.stringify(product));
+                        window.location.href = 'TheSanpham.html';
+                    }
+                }
+            });
+        }
+        });
+        </script>
+    </div>
+</header>
+
+<main>
+    <!-- Sidebar lọc -->
+    <aside class="sidebar">
+        <div class="filter-group">
+            <h3>Danh mục</h3>
+            <label><input type="checkbox" class="category-input" data-tag="ALL" checked> Tất cả</label>
+            <label><input type="checkbox" class="category-input" data-tag="MG"> Gundam MG</label>
+            <label><input type="checkbox" class="category-input" data-tag="RG"> Gundam RG</label>
+            <label><input type="checkbox" class="category-input" data-tag="HG"> Gundam HG</label>
+            <label><input type="checkbox" class="category-input" data-tag="EG"> Phụ kiện & dụng cụ</label>
+        </div>
+
+        <div class="filter-group">
+            <h3>Khoảng giá</h3>
+            <div class="price-range">
+                <input type="text" id="priceMin" placeholder="Từ" inputmode="numeric" pattern="[0-9]*" aria-label="Giá từ">
+                <span>→</span>
+                <input type="text" id="priceMax" placeholder="Đến" inputmode="numeric" pattern="[0-9]*" aria-label="Giá đến">
+            </div>
+            <div class="price-actions">
+                <button id="priceClear" class="btn outline">Bỏ tìm</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Danh sách sản phẩm -->
+    <section class="products-section">
+        <div class="products-header">
+            <h1>Tất cả sản phẩm (128 sản phẩm)</h1>
+            <div class="sort-select">
+                <select>
+                    <option>Mới nhất</option>
+                    <option>Giá: Thấp → Cao</option>
+                    <option>Giá: Cao → Thấp</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <!-- Sản phẩm sẽ được render động hoặc thêm ở đây -->
+        </div>
+
+        <!-- Phân trang -->
+        <div class="pagination">
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <span>...</span>
+            <a href="#">Next</a>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+            <div class="footer-section">
+                <h4>Về An's Toys Store</h4>
+                <ul>
+                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    <li><a href="#">Chính sách</a></li>
+                </ul>
+            </div>
+        <div class="footer-section">
+            <h4>Hỗ trợ</h4>
+            <ul>
+                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                <li><a href="#">Đổi trả</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Theo dõi</h4>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">TikTok</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Price input helpers: auto-scale shorthand (<1000 -> *1000) and format with thousands separator
+document.addEventListener('DOMContentLoaded', function() {
+    function rawDigits(s){ return (s||'').toString().replace(/\./g,'').replace(/[^0-9]/g,''); }
+    function normalizeAndFormat(el){
+        if(!el) return;
+        var raw = rawDigits(el.value);
+        if(!raw) { el.value = ''; return; }
+        var num = parseInt(raw,10) || 0;
+        if(num > 0 && num < 1000) num = num * 1000;
+        el.value = num ? num.toLocaleString('vi-VN') : '';
+    }
+    var minEl = document.getElementById('priceMin');
+    var maxEl = document.getElementById('priceMax');
+    [minEl, maxEl].forEach(function(el){
+        if(!el) return;
+        el.addEventListener('focus', function(){ this.value = rawDigits(this.value); });
+        el.addEventListener('blur', function(){ normalizeAndFormat(this); applyCategoryFilter(); });
+        el.addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g,''); });
+    });
+    // wire up the price action buttons
+    var clearBtn = document.getElementById('priceClear');
+    if (clearBtn) clearBtn.addEventListener('click', function(){ if(minEl) minEl.value = ''; if(maxEl) maxEl.value = ''; if (window.applyCategoryFilter) window.applyCategoryFilter(); });
+});
+</script>
+<script src="assets/js/hamburger.js"></script>
+
+</body>
+</html>

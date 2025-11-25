@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG Gundam MK-V - Lona3h</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/site.js"></script>
+    <style>
+        /* Reset và cơ bản */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header styles are centralized in assets/css/style.css */
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+        .product-detail {
+            max-width: 1600px;
+            min-height: 700px;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 2rem;
+            background: white;
+            border-radius: 10px;
+            padding: 4rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 5rem;
+            font-size: 1.18rem;
+        }
+        .product-images {
+            position: relative;
+        }
+        .main-image {
+            width: 100%;
+            height: 540px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .main-image:hover {
+            transform: scale(1.05);
+        }
+        .thumbnail-gallery {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .thumbnail.active {
+            border-color: #007bff;
+        }
+        .product-info {
+            padding-left: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 0.5rem;
+        }
+        .product-title {
+            font-size: 2.6rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .product-price {
+            font-size: 2.4rem;
+            color: #007bff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .product-old-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 0.5rem;
+        }
+        .product-specs {
+            margin-bottom: 2rem;
+        }
+        .product-specs h4 {
+            margin-bottom: 0.5rem;
+            color: #007bff;
+        }
+        .product-specs ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+        }
+        .product-specs li {
+            margin-bottom: 0.5rem;
+        }
+        .variant-select {
+            margin-bottom: 1rem;
+        }
+        .variant-select label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .variant-select select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .quantity-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .quantity-section label {
+            font-weight: 700;
+        }
+        .quantity-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .quantity-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        /* Action row for product-detail buttons */
+        .action-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 0.1rem; }
+        .action-row .btn { margin-right: 0; margin-bottom: 0; }
+
+        /* Mô tả sản phẩm */
+        .product-description {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+        .product-description h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .product-description p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* Review */
+        .reviews {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .reviews h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .review-item {
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        .stars {
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer styles are centralized in assets/css/style.css */
+        footer {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            background: #333;
+            color: #fff;
+            padding: 2rem 0 0.5rem 0;
+        }
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .footer-section {
+            min-width: 140px;
+            margin: 0;
+            padding: 0;
+        }
+        .footer-section ul {
+            margin: 0.3rem 0 0 0;
+            padding: 0;
+        }
+        .footer-section li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .product-detail { padding: 2.5rem; }
+            .product-title { font-size: 2.2rem; }
+            .product-price { font-size: 2rem; }
+            .main-image { height: 450px; }
+        }
+        @media (max-width: 992px) {
+            .product-detail {
+                max-width: 100%;
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+            .main-image { height: 400px; }
+            .product-title { font-size: 1.8rem; }
+            .product-price { font-size: 1.6rem; }
+            .product-info { padding-left: 0; }
+        }
+        @media (max-width: 768px) {
+            main { margin-top: 80px; padding: 1rem 0; }
+            .product-detail { 
+                padding: 1.5rem;
+                gap: 1.2rem;
+                min-height: auto;
+                margin-bottom: 3rem;
+                font-size: 1rem;
+            }
+            .main-image { height: 320px; }
+            .product-title { font-size: 1.4rem; margin-bottom: 0.5rem; }
+            .product-price { font-size: 1.3rem; }
+            .product-specs { margin-bottom: 1.5rem; }
+            .thumbnail-gallery { gap: 0.8rem; margin-top: 0.8rem; }
+            .thumbnail { width: 70px; height: 70px; }
+            .quantity-section { gap: 0.8rem; margin-bottom: 0.8rem; }
+            .quantity-input { gap: 0.3rem; }
+            .quantity-btn { padding: 0.4rem 0.6rem; font-size: 0.9rem; }
+            .quantity-input input { padding: 0.4rem 0.5rem; font-size: 0.9rem; }
+            .btn { padding: 0.8rem 1.2rem; font-size: 0.95rem; margin-top: 1rem; }
+        }
+        @media (max-width: 576px) {
+            .header-container { padding: 0.8rem 1rem; }
+            .logo { font-size: 1.1rem; }
+            nav { display: none; }
+            main { margin-top: 70px; padding: 0.8rem; }
+            .product-detail { 
+                padding: 1rem;
+                gap: 0.8rem;
+                margin-bottom: 2rem;
+                font-size: 0.95rem;
+            }
+            .main-image { height: 280px; }
+            .product-title { font-size: 1.2rem; }
+            .product-price { font-size: 1.1rem; }
+            .product-old-price { font-size: 0.9rem; }
+            .product-specs { margin-bottom: 1.2rem; }
+            .product-specs h4 { font-size: 0.95rem; }
+            .product-specs li { font-size: 0.9rem; }
+            .thumbnail-gallery { gap: 0.6rem; }
+            .thumbnail { width: 60px; height: 60px; }
+            .variant-select { margin-bottom: 0.8rem; }
+            .variant-select label { font-size: 0.9rem; }
+            .variant-select select { font-size: 0.9rem; }
+            .quantity-section { gap: 0.6rem; font-size: 0.9rem; }
+            .quantity-input { gap: 0.2rem; }
+            .quantity-btn { padding: 0.3rem 0.4rem; font-size: 0.8rem; }
+            .quantity-input input { padding: 0.3rem 0.4rem; font-size: 0.85rem; width: 50px; }
+            .btn { padding: 0.6rem 1rem; font-size: 0.9rem; width: 100%; margin-top: 0.8rem; }
+        }
+        @media (max-width: 480px) {
+            body { font-size: 13px; }
+            .product-detail { padding: 0.8rem; }
+            .main-image { height: 240px; }
+            .product-title { font-size: 1rem; }
+            .product-price { font-size: 0.95rem; }
+            .product-specs { display: none; }
+            .thumbnail { width: 50px; height: 50px; }
+            .quantity-input input { width: 40px; }
+            .btn { font-size: 0.85rem; }
+        }
+        /* Mobile-specific optimizations for touch */
+        @media (max-width: 768px) {
+            /* Touch-friendly input sizing */
+            input[type="number"],
+            select,
+            input[type="text"],
+            textarea {
+                font-size: 16px !important; /* Prevent auto-zoom on iOS */
+                padding: 0.75rem !important;
+                min-height: 44px !important; /* Apple touch target */
+            }
+            button,
+            .btn {
+                min-height: 44px !important;
+                min-width: 44px !important;
+            }
+        }
+        /* Notch/safe area support for iPhone X+ and modern devices */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+                padding-top: max(0, env(safe-area-inset-top));
+                padding-bottom: max(0, env(safe-area-inset-bottom));
+            }
+            header {
+                padding-left: max(0.5rem, env(safe-area-inset-left));
+                padding-right: max(0.5rem, env(safe-area-inset-right));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo" id="logo">AN TOY'S STORE</div>
+            <div style="flex:1"></div>
+            <div class="search-bar">
+                <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <div id="siteSearchResults" class="search-results" style="display:none;"></div>
+            </div>
+            <button class="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="Trangchu.html" id="homeMenu">Trang chủ</a></li>
+                    <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
+                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    
+                </ul>
+            </nav>
+            <div class="auth-wrap">
+                <div class="auth-icon" id="authIcon"></div>
+                <div class="auth-popup" id="authPopup"></div>
+            </div>
+            <div class="cart-icon" id="cartIcon">🛒</div>
+        </div>
+    </header>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Logo click về Trangchu.html
+        document.getElementById('logo').onclick = function() {
+            window.location.href = 'Trangchu.html';
+        };
+        // Giỏ hàng click về Giohangf.html
+        var cartIcon = document.getElementById('cartIcon');
+        var count = (window.SITE && SITE.recalcCartCount) ? SITE.recalcCartCount() : (localStorage.getItem('cartCount') || '0');
+        if (cartIcon) cartIcon.setAttribute('data-count', count);
+        cartIcon.onclick = function() {
+            window.location.href = 'Giohangf.html';
+        };
+        // Menu Sản phẩm click về TatcaSanpham.html
+        var allProductsMenu = document.getElementById('allProductsMenu');
+        if (allProductsMenu) {
+            allProductsMenu.onclick = function(e) {
+                e.preventDefault();
+                window.location.href = 'TatcaSanpham.html';
+            };
+        }
+        // Menu Trang chủ click về Trangchu.html (phòng trường hợp bị chặn bởi preventDefault)
+        var homeMenu = document.getElementById('homeMenu');
+        if (homeMenu) {
+            homeMenu.onclick = function(e) {
+                e.preventDefault();
+                window.location.href = 'Trangchu.html';
+            };
+        }
+        // Search bar logic
+        var searchInput = document.getElementById('siteSearchInput');
+        var searchResults = document.getElementById('siteSearchResults');
+        function renderSearchResults(results) {
+            if (!searchResults) return;
+            if (results.length === 0 || !searchInput.value.trim()) {
+                searchResults.style.display = 'none';
+                searchResults.innerHTML = '';
+                return;
+            }
+            searchResults.innerHTML = results.map(function(p, idx) {
+                return `<div class="search-result-item" data-idx="${idx}">
+                    <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
+                    <span>${p.name}</span>
+                    <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                </div>`;
+            }).join('');
+            searchResults.style.display = 'block';
+        }
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                var val = searchInput.value.trim().toLowerCase();
+                var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); });
+                renderSearchResults(results);
+            });
+            document.addEventListener('click', function(e){
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.style.display = 'none';
+                }
+            });
+            searchResults.addEventListener('click', function(e){
+                var item = e.target.closest('.search-result-item');
+                if (item) {
+                    var idx = parseInt(item.getAttribute('data-idx'));
+                    var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : [];
+                    var product = products[idx];
+                    if (product) {
+                        localStorage.setItem('currentProduct', JSON.stringify(product));
+                        window.location.href = 'TheSanpham.html';
+                    }
+                }
+            });
+        }
+    });
+    </script>
+    <script src="assets/js/hamburger.js"></script>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Product Detail -->
+            <section class="product-detail">
+                <div class="product-images">
+                    <img src="" alt="Sản phẩm" class="main-image" id="mainImage">
+                    <div class="thumbnail-gallery" id="thumbnailGallery"></div>
+                </div>
+                <div class="product-info">
+                    <h1 class="product-title" id="productTitle"></h1>
+                    <div class="product-price" id="productPrice"></div>
+                    <div class="variant-select">
+                    </div>
+
+                    <div class="quantity-section">
+                        <label for="quantity">Số lượng:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                            <input type="number" id="quantity" value="1" min="1" max="10">
+                            <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn" onclick="addToCart()">Thêm vào giỏ hàng</button>
+                        <button class="btn btn-secondary" onclick="buyNow()">Mua ngay</button>
+                    </div>
+                </div>
+                </section>
+                </div>
+            <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Về An's Toys Store</h4>
+                <ul>
+                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    <li><a href="#">Chính sách</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Hỗ Trợ</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Theo Dõi Chúng Tôi</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Thay đổi hình ảnh chính
+        function changeImage(src, el) {
+            document.getElementById('mainImage').src = src;
+            document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+
+        // Thay đổi số lượng
+        function changeQuantity(delta) {
+            const qty = document.getElementById('quantity');
+            let newQty = parseInt(qty.value) + delta;
+            if (newQty >= 1 && newQty <= 10) {
+                qty.value = newQty;
+            }
+        }
+
+        // Thêm vào giỏ (sử dụng SITE.addToCart)
+        function addToCart() {
+            var product = JSON.parse(localStorage.getItem('currentProduct'));
+            var qty = parseInt(document.getElementById('quantity').value) || 1;
+            if (product && window.SITE && SITE.addToCart) {
+                var newCount = SITE.addToCart(product, qty);
+                var cartIcon = document.getElementById('cartIcon');
+                if (cartIcon) cartIcon.setAttribute('data-count', newCount);
+                alert('Đã thêm vào giỏ hàng!');
+            } else {
+                alert('Không thể thêm vào giỏ hàng.');
+            }
+        }
+
+        // Mua ngay (giả lập)
+        function buyNow() {
+            var product = JSON.parse(localStorage.getItem('currentProduct'));
+            var qty = parseInt(document.getElementById('quantity').value) || 1;
+            if (product) {
+                // Đảm bảo checkoutNow là một mảng để trang thanh toán hiển thị đúng
+                localStorage.removeItem('checkoutCart');
+                localStorage.setItem('checkoutCart', JSON.stringify([{ ...product, qty: qty }]));
+                localStorage.removeItem('checkoutNow');
+            }
+            window.location.href = 'ThanhToan.html';
+        }
+    </script>
+<script>
+// Hiển thị sản phẩm động từ localStorage
+// Updated: Use product.gallery for carousel
+document.addEventListener('DOMContentLoaded', function() {
+    var product = JSON.parse(localStorage.getItem('currentProduct'));
+    if (product) {
+        // Use gallery if available, else fallback to single image
+        var gallery = Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [product.img];
+        // Set main image to first gallery image
+        document.getElementById('mainImage').src = gallery[0];
+        document.getElementById('mainImage').alt = product.name;
+        document.getElementById('productTitle').textContent = product.name;
+        document.getElementById('productPrice').textContent = product.price.toLocaleString('vi-VN') + 'đ';
+        // Render thumbnails
+        var thumbGallery = document.getElementById('thumbnailGallery');
+        thumbGallery.innerHTML = gallery.map(function(img, idx) {
+            return `<img src="${img}" alt="thumb" class="thumbnail${idx===0?' active':''}" onclick="changeImage('${img}', this)">`;
+        }).join('');
+    }
+});
+        </script>
+    <a class="floating-contact" href="tel:+84000000000" aria-label="Liên hệ">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <path fill="#ffffff" d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 01.95-.27c1.09.27 2.27.42 3.5.42a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.23.15 2.41.42 3.5a1 1 0 01-.27.95l-2.2 2.2z"/>
+        </svg>
+    </a>
+    </body>
+</html>

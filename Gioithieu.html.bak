@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Giới thiệu - An's Toy Store (backup)</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<script src="assets/js/site.js"></script>
+</head>
+<body>
+<header>
+	<div class="header-container">
+		<div class="logo" id="logo">AN TOY'S STORE</div>
+		<div style="flex:1"></div>
+		<div class="search-bar">
+			<input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+			<div id="siteSearchResults" class="search-results" style="display:none;"></div>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="Trangchu.html" id="homeMenu">Trang chủ</a></li>
+				<li><a href="TatcaSanpham.html" id="allProductsMenu">Sản phẩm</a></li>
+				<li><a href="Gioithieu.html">Giới thiệu</a></li>
+			</ul>
+		</nav>
+		<div class="auth-wrap">
+			<div class="auth-icon" id="authIcon"></div>
+			<div class="auth-popup" id="authPopup"></div>
+		</div>
+		<div class="cart-icon" id="cartIcon">🛒</div>
+	</div>
+</header>
+
+<section class="hero" style="background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://www.nme.com/wp-content/uploads/2023/02/moving-gundam-extends-one-year-022123.jpg') center/cover; height:420px; display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; margin-top:70px;">
+	<div class="hero-content">
+		<h1 class="title">LAN TỎA ĐAM MÊ MÔ HÌNH</h1>
+		<p class="subtitle">An's Toy Store chuyên phân phối Gunpla chính hãng với nhiều mẫu mã đa dạng, dịch vụ nhanh chóng và uy tín.</p>
+	</div>
+</section>
+
+<main>
+	<div style="max-width:1200px;margin: -40px auto 60px;padding:0 20px; display:grid; grid-template-columns:1fr 360px; gap:28px;">
+		<div style="background:#e9f6f4; border-radius:6px; padding:22px; box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+			<h2>Về An's Toy Store</h2>
+			<p>An's Toy Store được thành lập với mục tiêu mang đến cho người yêu mô hình tại Việt Nam những sản phẩm chính hãng chất lượng cao từ Nhật Bản và nhiều quốc gia khác.</p>
+			<p>Chúng tôi chuyên phân phối Gunpla, phụ kiện và nhiều mặt hàng liên quan đến sở thích sưu tập mô hình. Với đội ngũ am hiểu sản phẩm và chính sách hậu mãi rõ ràng, An's Toy Store luôn cố gắng đem tới trải nghiệm mua sắm tốt nhất.</p>
+		</div>
+		<aside>
+			<div style="background:#00a6a6;color:#fff;padding:22px;border-radius:6px;box-shadow:0 10px 24px rgba(0,0,0,0.08);">
+				<strong>◆ Thông tin nhanh</strong>
+				<ul style="margin-top:10px;">
+					<li>Thành lập: Tháng 7/2025</li>
+					<li>Địa điểm: Biên Hòa</li>
+					<li>Sản phẩm: Gunpla chính hãng</li>
+				</ul>
+			</div>
+		</aside>
+	</div>
+</main>
+
+<footer>
+	<div class="footer-content">
+		<div class="footer-section">
+			<h4>Về An's Toys Store</h4>
+			<ul>
+				<li><a href="Gioithieu.html">Giới thiệu</a></li>
+				<li><a href="#">Chính sách</a></li>
+			</ul>
+		</div>
+		<div class="footer-section">
+			<h4>Hỗ trợ</h4>
+			<ul>
+				<li><a href="#">Hướng dẫn mua hàng</a></li>
+				<li><a href="#">Đổi trả</a></li>
+				<li><a href="#">Liên hệ</a></li>
+			</ul>
+		</div>
+		<div class="footer-section">
+			<h4>Theo dõi</h4>
+			<ul>
+				<li><a href="#">Facebook</a></li>
+				<li><a href="#">Instagram</a></li>
+				<li><a href="#">TikTok</a></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+
+<!-- Backup snapshot created by assistant -->
+
+</body>
+</html>
