@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
             <div class="logo">AN TOY'S STORE</div>
             <div style="flex:1"></div>
             <div class="search-bar">
-                <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <input type="text" id="siteSearchInput" placeholder="Search for products..." autocomplete="off">
                 <div id="siteSearchResults" class="search-results" style="display:none;"></div>
             </div>
             <button class="hamburger-menu">
@@ -26,16 +26,16 @@
             </button>
             <nav>
                 <ul>
-                    <li><a href="#home">Trang chủ</a></li>
-                    <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
-                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products" id="allProductsMenu">Products</a></li>
+                    <li><a href="Gioithieu_en.html">About</a></li>
                     
                 </ul>
             </nav>
                 <div class="language-selector">
                     <select id="languageSelect">
                         <option value="vi">Tiếng Việt</option>
-                        <option value="en">English</option>
+                        <option value="en" selected>English</option>
                     </select>
                 </div>
                 <div class="auth-wrap">
@@ -63,7 +63,7 @@
                         return `<div class="search-result-item" data-idx="${idx}">
                             <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
                             <span>${p.name}</span>
-                            <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                            <span style="float:right;color:#007bff;font-weight:700;">$${(p.price / 26306).toFixed(2)}</span>
                         </div>`;
                     }).join('');
                     searchResults.style.display = 'block';
@@ -88,7 +88,7 @@
                             var product = products[idx];
                             if (product) {
                                 localStorage.setItem('currentProduct', JSON.stringify(product));
-                                window.location.href = 'TheSanpham.html';
+                                window.location.href = 'TheSanpham_en.html';
                             }
                         }
                     });
@@ -104,8 +104,8 @@
                             if (product && window.SITE && SITE.addToCart) {
                                 const newCount = SITE.addToCart(product, 1);
                                 if (cartIcon) cartIcon.setAttribute('data-count', newCount);
-                                btn.innerText = 'Đã thêm!';
-                                setTimeout(() => btn.innerText = 'Thêm vào giỏ hàng', 900);
+                                btn.innerText = 'Added!';
+                                setTimeout(() => btn.innerText = 'Add to Cart', 900);
                             }
                         });
                     }
@@ -115,7 +115,7 @@
                         const product = (window.SITE && SITE.demoProducts) ? SITE.demoProducts[idx] : null;
                         if (product) {
                             localStorage.setItem('currentProduct', JSON.stringify(product));
-                            window.location.href = 'TheSanpham.html';
+                            window.location.href = 'TheSanpham_en.html';
                         }
                     });
                     // Set cursor pointer for card
@@ -123,19 +123,32 @@
                 });
 
                 if (cartIcon) {
-                    cartIcon.addEventListener('click', function() { window.location.href = 'Giohangf.html'; });
+                    cartIcon.addEventListener('click', function() { window.location.href = 'Giohangf_en.html'; });
                 }
                 var allProductsMenu = document.getElementById('allProductsMenu');
                 if (allProductsMenu) {
-                    allProductsMenu.onclick = function(e) { e.preventDefault(); window.location.href = 'TatcaSanpham.html'; };
+                    allProductsMenu.onclick = function(e) { e.preventDefault(); window.location.href = 'TatcaSanpham_en.html'; };
                 }
                 var heroBuyNowBtn = document.getElementById('heroBuyNowBtn');
                 if (heroBuyNowBtn) {
                     heroBuyNowBtn.addEventListener('click', function(e) {
                         e.preventDefault();
-                        window.location.href = 'TatcaSanpham.html';
+                        window.location.href = 'TatcaSanpham_en.html';
                     });
                 }
+
+                // Update featured product prices dynamically
+                document.querySelectorAll('.products-grid .product-card').forEach(function(card, idx) {
+                    var product = (window.SITE && SITE.demoProducts) ? SITE.demoProducts[idx] : null;
+                    if (product) {
+                        var priceEl = card.querySelector('.product-price');
+                        if (priceEl) {
+                            var currentPrice = '$' + (product.price / 26306).toFixed(2);
+                            var oldPrice = product.oldPrice ? ' <span class="product-old-price">$' + (product.oldPrice / 26306).toFixed(2) + '</span>' : '';
+                            priceEl.innerHTML = currentPrice + oldPrice;
+                        }
+                    }
+                });
 
                 var languageSelect = document.getElementById('languageSelect');
                 if (languageSelect) {
@@ -152,8 +165,8 @@
 
                 // Check stored language and redirect if necessary
                 var storedLang = localStorage.getItem('language');
-                if (storedLang === 'en') {
-                    window.location.href = 'Trangchu_en.html';
+                if (storedLang === 'vi') {
+                    window.location.href = 'Trangchu.html';
                 }
             });
             </script>
@@ -169,11 +182,10 @@
             <div class="hero-slide" style="background-image: url('https://wallpapers.com/images/hd/mobile-suit-gundam-00-3fqkr8grbop4n2u4.jpg')"></div>
         </div>
         <div class="hero-content">
-            <h1>Mô hình chất lượng cao</h1>
-            <p>Khám phá những sản phẩm mới nhất với giá ưu đãi</p>
-            <a href="#products" class="btn" id="heroBuyNowBtn">Mua Ngay</a>
-        </div>
-        <button class="hero-nav prev" id="heroPrev">‹</button>
+            <h1>High-Quality Models</h1>
+            <p>Discover the latest products at discounted prices</p>
+            <a href="#products" class="btn" id="heroBuyNowBtn">Buy Now</a>
+        </div>        <button class="hero-nav prev" id="heroPrev">‹</button>
         <button class="hero-nav next" id="heroNext">›</button>
         <div class="hero-indicators">
             <span class="indicator active" data-index="0"></span>
@@ -189,12 +201,11 @@
             <input type="text" id="heroSearchInput" class="search-input" placeholder="Search by Keyword" autocomplete="off">
             <button class="search-btn">Search</button>
             <div id="heroSearchResults" class="search-results-carousel" style="display:none;"></div>
-        </div>
-    </section>
+        </div>    </section>
 
     <!-- Main Content -->
     <main>
-        <!-- Danh mục -->
+        <!-- Categories -->
         <section class="categories">
             <div class="category-card" data-category="HG">
                 <img src="https://file.hstatic.net/200000326537/file/logo_hg_ccb9914b9c7148d99bfd86663b6f086c_compact.png" alt="HG" class="category-img">
@@ -209,84 +220,84 @@
                 <h3>MG</h3>
             </div>
                 <div class="category-card" data-category="EG">
-                    <img src="https://file.hstatic.net/200000326537/file/logo_tool_8a7ef212843749eeb42d15e321d2ed22_compact.png" alt="Phụ kiện" class="category-img">
-                    <h3>Phụ kiện</h3>
+                    <img src="https://file.hstatic.net/200000326537/file/logo_tool_8a7ef212843749eeb42d15e321d2ed22_compact.png" alt="Accessories" class="category-img">
+                    <h3>Accessories</h3>
             </div>
         </section>
 
-        <!-- Sản phẩm nổi bật -->
+        <!-- Featured Products -->
         <section class="featured">
-            <h2>Sản Phẩm Nổi Bật</h2>
+            <h2>Featured Products</h2>
             <div class="products-grid">
                 <div class="product-card" data-idx="0">
                     <img src="https://th-test-11.slatic.net/p/a8c4aac9b4576c3e8339e031d0cb16c1.jpg" alt="HG Aerial">
                     <div class="product-info">
                         <h3>HG Aerial</h3>
-                        <div class="product-price">500.000đ <span class="product-old-price">600.000đ</span></div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$500 <span class="product-old-price">$600</span></div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="1">
                     <img src="https://concagunpla.com/wp-content/uploads/2025/11/HGGQ-Rick-Dom-Artbox.webp" alt="HG Gaia's/Ortega's Rick Dom (GQ)">
                     <div class="product-info">
                         <h3>HG Gaia's/Ortega's Rick Dom (GQ)</h3>
-                        <div class="product-price">700.000đ <span class="product-old-price">800.000đ</span></div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$700 <span class="product-old-price">$800</span></div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="2">
                     <img src="https://www.usagundamstore.com/cdn/shop/products/rg_1_144_sazabi_box_art.jpg?v=1654287661" alt="RG Sazabi">
                     <div class="product-info">
                         <h3>RG Sazabi</h3>
-                        <div class="product-price">1.200.000đ</div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$1,200</div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="3">
                     <img src="https://bandai-hobby.net/images/158_1718_s_b3ogk0hnas45eb4ymqe3uyl7uumy.jpg" alt="HG Hashmal">
                     <div class="product-info">
                         <h3>HG Hashmal</h3>
-                        <div class="product-price">900.000đ <span class="product-old-price">1.000.000đ</span></div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$900 <span class="product-old-price">$1,000</span></div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Pre-order Ngay -->
+        <!-- Pre-order Now -->
         <section class="featured">
-            <h2>Pre-order Ngay</h2>
+            <h2>Pre-order Now</h2>
             <div class="products-grid">
                 <div class="product-card" data-idx="8">
                     <img src="https://scontent.fsgn15-1.fna.fbcdn.net/v/t39.30808-6/590662278_1397961529005623_3756809110578993540_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=Bkk8Bnv3f_gQ7kNvwFm0V0D&_nc_oc=AdlI9Tr6EmW8RwxGWI8oMIHmO0s2oUqGIIDPpRsDIIHmSfw1aFS8F4RzmAVwkN2L9ElrJ7qj4ajsmv_K4iEQD4WH&_nc_zt=23&_nc_ht=scontent.fsgn15-1.fna&_nc_gid=tUjsWiuHOR_8QAxRKX7jyg&oh=00_AfmH7oyG4QJRSuuiA2H1kewCeuX_RHIdAExQzMTupxwB2w&oe=69429B6F" alt="RG Astray red dragon (Pre-order)">
                     <div class="product-info">
                         <h3>RG Astray red dragon (Pre-order)</h3>
-                        <div class="product-price">1.500.000đ</div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$57.01</div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="9">
                     <img src="https://scontent.fsgn15-1.fna.fbcdn.net/v/t39.30808-6/592381983_1253166983496927_7932213611015691988_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=TbOQl46H_CMQ7kNvwFDLoK0&_nc_oc=Admu5V-kbzhq2iE59Lb0PzSW0x-hbmr1ldHr07VBfqAlp1kinAprU7k_JWKNTkw_iPOD8H28DWuuPnX6TOGnKYd1&_nc_zt=23&_nc_ht=scontent.fsgn15-1.fna&_nc_gid=XaBKKjvCINSSy_rZYwzU4w&oh=00_AfmSWABtMtyQGlrg8tjlwWH3AX78IeYf9vF4oHZkfezPTA&oe=6942A7B2" alt="HG Zagan (Pre-order)">
                     <div class="product-info">
                         <h3>HG Zagan (Pre-order)</h3>
-                        <div class="product-price">780.000đ</div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$29.65</div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="10">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAp6bG5-lMYzQY0-8Um-l_df0Wcx_bjLwTspADgNe-9LvWGgQGOp-TSSzIyIJ4YGZTsOVlzwK5cCE_qNC1kGtSKWhokeYOSTVByJ19cSApWNS1rVSOf_UXhlmv42Zv7wRtJ8Cwc34L6ckn5EQ75HGRoWOJe2xCq934S1Rz1Kh_df1u0oai26_j-rUt-Q/s16000-rw/hg%20white%20gundam%20box%20art.jpg" alt="HG White Gundam (Pre-order)">
                     <div class="product-info">
                         <h3>HG White Gundam (Pre-order)</h3>
-                        <div class="product-price">650.000đ</div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$24.71</div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card" data-idx="11">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhM6dxBSs0TsE7ZC-SeLnD35H5cpB8GHXPjKkUHzrj2Otm18Oz5AEn52ikaear5mG8L2uU6AUZtTJkP-jg4LCfYtRdhjySARqInB0uCJbJMBEgrZEGXPuSGP0pekxikfKQZeEFPEOK11emiIGT2b5Lqrf-AdEai05hQmquulxns7VtI2OP9myapAn5psA/s16000-rw/mg%20barbatos%20lupus%20rex%20box%20art.jpg" alt="MG Barbatos Lupus (Pre-order)">
                     <div class="product-info">
                         <h3>MG Barbatos Lupus (Pre-order)</h3>
-                        <div class="product-price">1.700.000đ</div>
-                        <button class="btn">Thêm vào giỏ hàng</button>
+                        <div class="product-price">$36.11</div>
+                        <button class="btn">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -296,37 +307,37 @@
     <!-- Footer -->
     <footer>
         <script>
-        // Sự kiện click cho từng category-card để chuyển trang và lưu danh mục
+        // Event for category-card clicks to navigate and save category
         document.addEventListener('DOMContentLoaded', function() {
             var categoryCards = document.querySelectorAll('.category-card');
             categoryCards.forEach(function(card) {
                 card.addEventListener('click', function() {
                     var cat = card.getAttribute('data-category');
-                    // Lưu danh mục được chọn vào localStorage
+                    // Save selected category to localStorage
                     localStorage.setItem('selectedCategory', cat);
-                    window.location.href = 'TatcaSanpham.html';
+                    window.location.href = 'TatcaSanpham_en.html';
                 });
             });
         });
         </script>
         <div class="footer-content">
             <div class="footer-section">
-                <h4>Về An's Toys Store</h4>
+                <h4>About An's Toys Store</h4>
                 <ul>
-                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
-                    <li><a href="#">Chính sách</a></li>
+                    <li><a href="Gioithieu_en.html">Introduction</a></li>
+                    <li><a href="#">Policies</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Hỗ Trợ</h4>
+                <h4>Support</h4>
                 <ul>
-                    <li><a href="#">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#">Chính sách đổi trả</a></li>
-                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Shopping Guide</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Theo Dõi Chúng Tôi</h4>
+                <h4>Follow Us</h4>
                 <ul>
                     <li><a href="#">Facebook</a></li>
                     <li><a href="#">Instagram</a></li>
@@ -335,7 +346,7 @@
             </div>
         </div>
     </footer>
-    <a class="floating-contact" href="tel:+84000000000" aria-label="Liên hệ">
+    <a class="floating-contact" href="tel:+84000000000" aria-label="Contact">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
             <path fill="#ffffff" d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 01.95-.27c1.09.27 2.27.42 3.5.42a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.23.15 2.41.42 3.5a1 1 0 01-.27.95l-2.2 2.2z"/>
         </svg>

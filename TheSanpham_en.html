@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -211,7 +211,7 @@
         .action-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 0.1rem; }
         .action-row .btn { margin-right: 0; margin-bottom: 0; }
 
-        /* Mô tả sản phẩm */
+        /* Product Description */
         .product-description {
             background: white;
             border-radius: 10px;
@@ -481,7 +481,7 @@
             <div class="logo" id="logo">AN TOY'S STORE</div>
             <div style="flex:1"></div>
             <div class="search-bar">
-                <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <input type="text" id="siteSearchInput" placeholder="Search for products..." autocomplete="off">
                 <div id="siteSearchResults" class="search-results" style="display:none;"></div>
             </div>
             <button class="hamburger-menu">
@@ -491,16 +491,16 @@
             </button>
             <nav>
                 <ul>
-                    <li><a href="Trangchu.html" id="homeMenu">Trang chủ</a></li>
-                    <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
-                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                    <li><a href="Trangchu_en.html" id="homeMenu">Home</a></li>
+                    <li><a href="#products" id="allProductsMenu">Products</a></li>
+                    <li><a href="Gioithieu_en.html">About</a></li>
                     
                 </ul>
             </nav>
             <div class="language-selector">
                 <select id="languageSelect">
-                    <option value="vi" selected>Tiếng Việt</option>
-                    <option value="en">English</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en" selected>English</option>
                 </select>
             </div>
             <div class="auth-wrap">
@@ -523,7 +523,7 @@
         cartIcon.onclick = function() {
             window.location.href = 'Giohangf.html';
         };
-        // Menu Sản phẩm click về TatcaSanpham.html
+        // Products menu click to go to TatcaSanpham.html
         var allProductsMenu = document.getElementById('allProductsMenu');
         if (allProductsMenu) {
             allProductsMenu.onclick = function(e) {
@@ -531,7 +531,7 @@
                 window.location.href = 'TatcaSanpham.html';
             };
         }
-        // Menu Trang chủ click về Trangchu.html (phòng trường hợp bị chặn bởi preventDefault)
+        // Home menu click to go to Trangchu.html (in case prevented by preventDefault)
         var homeMenu = document.getElementById('homeMenu');
         if (homeMenu) {
             homeMenu.onclick = function(e) {
@@ -553,7 +553,7 @@
                 return `<div class="search-result-item" data-idx="${idx}">
                     <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
                     <span>${p.name}</span>
-                    <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                    <span style="float:right;color:#007bff;font-weight:700;">$${(p.price / 26306).toFixed(2)}</span>
                 </div>`;
             }).join('');
             searchResults.style.display = 'block';
@@ -593,7 +593,7 @@
             <!-- Product Detail -->
             <section class="product-detail">
                 <div class="product-images">
-                    <img src="" alt="Sản phẩm" class="main-image" id="mainImage">
+                    <img src="" alt="Product" class="main-image" id="mainImage">
                     <div class="thumbnail-gallery" id="thumbnailGallery"></div>
                 </div>
                 <div class="product-info">
@@ -603,7 +603,7 @@
                     </div>
 
                     <div class="quantity-section">
-                        <label for="quantity">Số lượng:</label>
+                        <label for="quantity">In Stock:</label>
                         <div class="quantity-input">
                             <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
                             <input type="number" id="quantity" value="1" min="1" max="10">
@@ -612,8 +612,8 @@
                     </div>
 
                     <div class="action-row">
-                        <button class="btn" onclick="addToCart()">Thêm vào giỏ hàng</button>
-                        <button class="btn btn-secondary" onclick="buyNow()">Mua ngay</button>
+                        <button class="btn" onclick="addToCart()">Add to Cart</button>
+                        <button class="btn btn-secondary" onclick="buyNow()">Buy now</button>
                     </div>
                 </div>
                 </section>
@@ -623,7 +623,7 @@
     <!-- Recommended Products Section -->
     <section class="recommended-section">
         <div class="container">
-            <h2>Sản Phẩm Gợi Ý Cho Bạn</h2>
+            <h2>Recommended Products for You</h2>
             <div class="recommended-grid" id="recommendedGrid">
                 <!-- Cards will be generated by JavaScript -->
             </div>
@@ -634,22 +634,22 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h4>Về An's Toys Store</h4>
+                <h4>About An's Toys Store</h4>
                 <ul>
-                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
-                    <li><a href="#">Chính sách</a></li>
+                    <li><a href="Gioithieu.html">Introduction</a></li>
+                    <li><a href="#">Policies</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Hỗ Trợ</h4>
+                <h4>Support</h4>
                 <ul>
-                    <li><a href="#">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#">Chính sách đổi trả</a></li>
-                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Shopping Guide</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Theo Dõi Chúng Tôi</h4>
+                <h4>Follow Us</h4>
                 <ul>
                     <li><a href="#">Facebook</a></li>
                     <li><a href="#">Instagram</a></li>
@@ -660,14 +660,14 @@
     </footer>
 
     <script>
-        // Thay đổi hình ảnh chính
+        // Change main image
         function changeImage(src, el) {
             document.getElementById('mainImage').src = src;
             document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
             if (el) el.classList.add('active');
         }
 
-        // Thay đổi số lượng
+        // Change quantity
         function changeQuantity(delta) {
             const qty = document.getElementById('quantity');
             let newQty = parseInt(qty.value) + delta;
@@ -684,9 +684,9 @@
                 var newCount = SITE.addToCart(product, qty);
                 var cartIcon = document.getElementById('cartIcon');
                 if (cartIcon) cartIcon.setAttribute('data-count', newCount);
-                alert('Đã thêm vào giỏ hàng!');
+                alert('Added to cart!');
             } else {
-                alert('Không thể thêm vào giỏ hàng.');
+                alert('Cannot add to cart.');
             }
         }
 
@@ -695,7 +695,7 @@
             var product = JSON.parse(localStorage.getItem('currentProduct'));
             var qty = parseInt(document.getElementById('quantity').value) || 1;
             if (product) {
-                // Đảm bảo checkoutNow là một mảng để trang thanh toán hiển thị đúng
+                // Ensure checkoutNow is an array for the checkout page to display correctly
                 localStorage.removeItem('checkoutCart');
                 localStorage.setItem('checkoutCart', JSON.stringify([{ ...product, qty: qty }]));
                 localStorage.removeItem('checkoutNow');
@@ -704,7 +704,7 @@
         }
     </script>
 <script>
-    // Hiển thị sản phẩm động từ localStorage
+    // Display dynamic products from localStorage
 // Updated: Use product.gallery for carousel and set document title dynamically
 document.addEventListener('DOMContentLoaded', function() {
     var product = JSON.parse(localStorage.getItem('currentProduct'));
@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('mainImage').src = gallery[0];
         document.getElementById('mainImage').alt = product.name;
         document.getElementById('productTitle').textContent = product.name;
-        document.getElementById('productPrice').textContent = product.price.toLocaleString('vi-VN') + 'đ';
+        document.getElementById('productPrice').textContent = '$' + (product.price / 26306).toFixed(2);
         // Render thumbnails
         var thumbGallery = document.getElementById('thumbnailGallery');
         thumbGallery.innerHTML = gallery.map(function(img, idx) {
@@ -768,10 +768,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="recommended-info">
                     <h3>${product.name}</h3>
                     <div class="recommended-price">
-                        <span class="old-price">${oldPrice.toLocaleString('vi-VN')}đ</span>
-                        ${product.price.toLocaleString('vi-VN')}đ
+                        <span class="old-price">$${(oldPrice / 26306).toFixed(2)}</span>
+                        $${(product.price / 26306).toFixed(2)}
                     </div>
-                    <button class="btn" style="width:100%;padding:0.6rem;font-size:0.9rem;margin:0.8rem 0 0 0;">Xem Chi Tiết</button>
+                    <button class="btn" style="width:100%;padding:0.6rem;font-size:0.9rem;margin:0.8rem 0 0 0;">More detail</button>
                 </div>
             </div>`;
         }).join('');
@@ -803,8 +803,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Check stored language and redirect if necessary
     var storedLang = localStorage.getItem('language');
-    if (storedLang === 'en') {
-        window.location.href = 'TheSanpham_en.html';
+    if (storedLang === 'vi') {
+        window.location.href = 'TheSanpham.html';
     }
     </script>
     <a class="floating-contact" href="tel:+84000000000" aria-label="Liên hệ">

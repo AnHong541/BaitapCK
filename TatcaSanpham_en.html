@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tất cả sản phẩm - An's Toys Store</title>
+    <title>All Products - An's Toys Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400,500,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/site.js"></script>
@@ -29,7 +29,7 @@
             gap:2rem;
         }
 
-        /* Sidebar lọc */
+        /* Filter Sidebar */
         .sidebar {
             background:#fff;
             padding:1.5rem;
@@ -130,7 +130,7 @@
             cursor: pointer;
         }
 
-        /* Grid sản phẩm */
+        /* Product Grid */
         .products-grid {
             display:grid;
             grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
@@ -353,7 +353,7 @@
         <div class="logo" id="logo">AN TOY'S STORE</div>
     		<div style="flex:1"></div>
             <div class="search-bar">
-                <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <input type="text" id="siteSearchInput" placeholder="Search for products..." autocomplete="off">
                 <div id="siteSearchResults" class="search-results" style="display:none;"></div>
             </div>
             <button class="hamburger-menu">
@@ -363,16 +363,16 @@
             </button>
         <nav>
             <ul>
-                <li><a href="Trangchu.html">Trang chủ</a></li>
-                <li><a href="#products" id="allProductsMenu">Sản phẩm</a></li>
-                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="Trangchu_en.html">Home</a></li>
+                <li><a href="#products" id="allProductsMenu">Products</a></li>
+                <li><a href="Gioithieu_en.html">About</a></li>
                     
             </ul>
         </nav>
         <div class="language-selector">
             <select id="languageSelect">
-                <option value="vi" selected>Tiếng Việt</option>
-                <option value="en">English</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="en" selected>English</option>
             </select>
         </div>
         <div class="auth-wrap">
@@ -421,8 +421,8 @@
                     + '<img src="'+p.img+'" alt="'+p.name+'">'
                     + '<div class="product-info">'
                         + '<h3>'+p.name+'</h3>'
-                        + '<div class="price">'+p.price.toLocaleString('vi-VN')+'đ' + (p.oldPrice ? (' <span class="old-price">'+p.oldPrice.toLocaleString('vi-VN')+'đ</span>') : '') + '</div>'
-                        + '<button class="btn" data-idx="'+(startIdx+idx)+'">Thêm vào giỏ hàng</button>'
+                        + '<div class="price">$'+(p.price / 26306).toFixed(2) + (p.oldPrice ? (' <span class="old-price">$'+(p.oldPrice / 26306).toFixed(2)+'</span>') : '') + '</div>'
+                        + '<button class="btn" data-idx="'+(startIdx+idx)+'">Add to Cart</button>'
                     + '</div>'
                 + '</div>';
             });
@@ -430,7 +430,7 @@
 
             // Update header count and pagination
             var headerTitle = document.querySelector('.products-header h1');
-            if (headerTitle) headerTitle.innerHTML = 'Tất cả sản phẩm ('+products.length+' sản phẩm)';
+            if (headerTitle) headerTitle.innerHTML = 'All Products ('+products.length+' products)';
             var pageCount = Math.ceil(products.length / pageSize);
             var pagination = document.querySelector('.pagination');
             if (pagination) {
@@ -464,8 +464,8 @@
                         var newCount = SITE.addToCart(product, 1);
                         var cartIconEl = document.getElementById('cartIcon');
                         if (cartIconEl) cartIconEl.setAttribute('data-count', newCount);
-                        this.innerText = 'Đã thêm!';
-                        setTimeout(()=> this.innerText = 'Thêm vào giỏ hàng', 900);
+                        this.innerText = 'Added!';
+                        setTimeout(()=> this.innerText = 'Add to Cart', 900);
                     }
                 });
             });
@@ -521,9 +521,9 @@
                 var sortVal = sortSelect.value;
                 if (sortVal === 'Mới nhất') {
                     // Default: keep order
-                } else if (sortVal === 'Giá: Thấp → Cao') {
+                } else if (sortVal === 'Price: Low to High') {
                     products.sort(function(a,b){ return a.price - b.price; });
-                } else if (sortVal === 'Giá: Cao → Thấp') {
+                } else if (sortVal === 'Price: High to Low') {
                     products.sort(function(a,b){ return b.price - a.price; });
                 }
             }
@@ -587,7 +587,7 @@
             
             toggleBtn.addEventListener('click', function(){
                 sidebar.classList.toggle('active');
-                toggleBtn.textContent = sidebar.classList.contains('active') ? '✕ Đóng' : '🔽 Lọc';
+                toggleBtn.textContent = sidebar.classList.contains('active') ? '✕ Close' : '🔽 Filter';
             });
             
             // Close sidebar when clicking outside on mobile/tablet
@@ -595,7 +595,7 @@
                 if (window.innerWidth <= 992 && !sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
                     if (sidebar.classList.contains('active')) {
                         sidebar.classList.remove('active');
-                        toggleBtn.textContent = '🔽 Lọc';
+                        toggleBtn.textContent = '🔽 Filter';
                     }
                 }
             });
@@ -615,7 +615,7 @@
                 return `<div class="search-result-item" data-idx="${idx}">
                     <img src="${p.img}" alt="${p.name}" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle;">
                     <span>${p.name}</span>
-                    <span style="float:right;color:#007bff;font-weight:700;">${p.price.toLocaleString('vi-VN')}đ</span>
+                    <span style="float:right;color:#007bff;font-weight:700;">$${(p.price / 26306).toFixed(2)}</span>
                 </div>`;
             }).join('');
             searchResults.style.display = 'block';
@@ -654,45 +654,45 @@
     <!-- Sidebar lọc -->
     <aside class="sidebar">
         <div class="filter-group">
-            <h3>Danh mục</h3>
-            <label><input type="checkbox" class="category-input" data-tag="ALL" checked> Tất cả</label>
+            <h3>Category</h3>
+            <label><input type="checkbox" class="category-input" data-tag="ALL" checked> All Products</label>
             <label><input type="checkbox" class="category-input" data-tag="MG"> Gundam MG</label>
             <label><input type="checkbox" class="category-input" data-tag="RG"> Gundam RG</label>
             <label><input type="checkbox" class="category-input" data-tag="HG"> Gundam HG</label>
-            <label><input type="checkbox" class="category-input" data-tag="EG"> Phụ kiện & dụng cụ</label>
+            <label><input type="checkbox" class="category-input" data-tag="EG"> Accessories & Tools</label>
         </div>
 
         <div class="filter-group">
-            <h3>Khoảng giá</h3>
+            <h3>Price Range</h3>
             <div class="price-range">
-                <input type="text" id="priceMin" placeholder="Từ" inputmode="numeric" pattern="[0-9]*" aria-label="Giá từ">
+                <input type="text" id="priceMin" placeholder="From" inputmode="numeric" pattern="[0-9]*" aria-label="Price from">
                 <span>→</span>
-                <input type="text" id="priceMax" placeholder="Đến" inputmode="numeric" pattern="[0-9]*" aria-label="Giá đến">
+                <input type="text" id="priceMax" placeholder="To" inputmode="numeric" pattern="[0-9]*" aria-label="Price to">
             </div>
             <div class="price-actions">
-                <button id="priceClear" class="btn outline">Bỏ tìm</button>
+                <button id="priceClear" class="btn outline">Cancel</button>
             </div>
         </div>
     </aside>
 
-    <!-- Danh sách sản phẩm -->
+    <!-- Product List -->
     <section class="products-section">
         <div class="products-header">
-            <h1>Tất cả sản phẩm (128 sản phẩm)</h1>
+            <h1>All Products (128 products)</h1>
             <div class="header-controls">
                 <div class="sort-select">
                     <select>
-                        <option>Mới nhất</option>
-                        <option>Giá: Thấp → Cao</option>
-                        <option>Giá: Cao → Thấp</option>
+                        <option>Newest</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
                     </select>
                 </div>
-                <button id="filterToggleBtn" class="filter-toggle-btn" aria-label="Bật/tắt bộ lọc">🔽 Lọc</button>
+                <button id="filterToggleBtn" class="filter-toggle-btn" aria-label="Toggle filter">🔽 Filter</button>
             </div>
         </div>
 
         <div class="products-grid">
-            <!-- Sản phẩm sẽ được render động hoặc thêm ở đây -->
+            <!-- Products will be rendered dynamically or added here -->
         </div>
 
         <!-- Phân trang -->
@@ -712,22 +712,22 @@
 <footer>
     <div class="footer-content">
             <div class="footer-section">
-                <h4>Về An's Toys Store</h4>
+                <h4>About An's Toys Store</h4>
                 <ul>
-                    <li><a href="Gioithieu.html">Giới thiệu</a></li>
-                    <li><a href="#">Chính sách</a></li>
+                    <li><a href="Gioithieu_en.html">Introduction</a></li>
+                    <li><a href="#">Policies</a></li>
                 </ul>
             </div>
         <div class="footer-section">
-            <h4>Hỗ trợ</h4>
+            <h4>Support</h4>
             <ul>
-                <li><a href="#">Hướng dẫn mua hàng</a></li>
-                <li><a href="#">Đổi trả</a></li>
-                <li><a href="#">Liên hệ</a></li>
+                <li><a href="#">Shopping Guide</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </div>
         <div class="footer-section">
-            <h4>Theo dõi</h4>
+            <h4>Follow Us</h4>
             <ul>
                 <li><a href="#">Facebook</a></li>
                 <li><a href="#">Instagram</a></li>
@@ -776,8 +776,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Check stored language and redirect if necessary
     var storedLang = localStorage.getItem('language');
-    if (storedLang === 'en') {
-        window.location.href = 'TatcaSanpham_en.html';
+    if (storedLang === 'vi') {
+        window.location.href = 'TatcaSanpham.html';
     }
 });
 </script>

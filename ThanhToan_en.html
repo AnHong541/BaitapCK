@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Thanh toán - An's Toy Store</title>
+    <title>Checkout - An's Toy Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/site.js"></script>
@@ -14,7 +14,7 @@
         <div class="logo" id="logo">AN TOY'S STORE</div>
         <div style="flex:1"></div>
         <div class="search-bar">
-            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <input type="text" id="siteSearchInput" placeholder="Search for products..." autocomplete="off">
             <div id="siteSearchResults" class="search-results" style="display:none;"></div>
         </div>
         <button class="hamburger-menu">
@@ -24,15 +24,15 @@
         </button>
         <nav>
             <ul>
-                <li><a href="Trangchu.html">Trang chủ</a></li>
-                <li><a href="TatcaSanpham.html">Sản phẩm</a></li>
-                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="Trangchu_en.html">Home</a></li>
+                <li><a href="TatcaSanpham_en.html">Products</a></li>
+                <li><a href="Gioithieu_en.html">About</a></li>
             </ul>
         </nav>
         <div class="language-selector">
             <select id="languageSelect">
-                <option value="vi" selected>Tiếng Việt</option>
-                <option value="en">English</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="en" selected>English</option>
             </select>
         </div>
         <div class="auth-wrap">
@@ -46,14 +46,14 @@
 <main style="max-width:1100px;margin:100px auto;padding:0 1rem;">
     <div class="page-grid">
         <div class="page-main">
-            <h1>Thanh toán</h1>
-            <div id="checkoutArea">Đang tải...</div>
+            <h1>Checkout</h1>
+            <div id="checkoutArea">Loading...</div>
         </div>
         <aside class="page-aside">
             <div class="summary-card" id="checkoutSummary">
-                <div class="summary-title">Chi tiết thanh toán</div>
-                <div class="summary-amount">0đ</div>
-                <div class="summary-actions"><button class="btn btn-primary" id="placeOrderBtn">Đặt hàng</button></div>
+                <div class="summary-title">Payment Details</div>
+                <div class="summary-amount">$0</div>
+                <div class="summary-actions"><button class="btn btn-primary" id="placeOrderBtn">Place Order</button></div>
             </div>
         </aside>
     </div>
@@ -72,7 +72,7 @@
             <h4>Hỗ trợ</h4>
             <ul>
                 <li><a href="#">Hướng dẫn mua hàng</a></li>
-                <li><a href="#">Đổi trả</a></li>
+                <li><a href="#">Returns</a></li>
                 <li><a href="#">Liên hệ</a></li>
             </ul>
         </div>
@@ -96,7 +96,7 @@
     };
     var appliedCoupon = null;
 
-    function formatVND(n){ return (n||0).toLocaleString('vi-VN') + 'đ'; }
+    function formatUSD(n){ return '$' + ((n||0)/26306).toFixed(2); }
 
     function getCheckoutItems(){
         var items = JSON.parse(localStorage.getItem('checkoutCart') || '[]');
@@ -108,55 +108,55 @@
         var items = getCheckoutItems();
         var area = document.getElementById('checkoutArea');
         if (!items || items.length === 0){
-            area.innerHTML = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">Không có sản phẩm để thanh toán. <a href="TatcaSanpham.html">Quay lại mua sắm</a></p></div>';
+            area.innerHTML = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">No products to checkout. <a href="TatcaSanpham_en.html">Back to shopping</a></p></div>';
             updateSummary(0,0);
             return;
         }
 
         var leftHtml = '';
         // Customer info
-        leftHtml += '<div class="checkout-card"><h3>Thông tin khách hàng</h3>'+
+        leftHtml += '<div class="checkout-card"><h3>Customer info</h3>'+
             '<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">'
-            + '<input id="customerName" placeholder="Tên khách hàng *" style="flex:1 1 300px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
-            + '<input id="customerPhone" placeholder="Số điện thoại *" style="flex:0 0 260px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<input id="customerName" placeholder="Customer name *" style="flex:1 1 300px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<input id="customerPhone" placeholder="Phone Number *" style="flex:0 0 260px;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
             + '</div></div>';
 
         // Address
-        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Hình thức nhận hàng</h3>'+
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Delivery method</h3>'+
             '<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">'
-            + '<div style="flex:1 1 48%"><input id="cityInput" list="cityDatalist" placeholder="Tỉnh/Thành phố *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<div style="flex:1 1 48%"><input id="cityInput" list="cityDatalist" placeholder="Province/City *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
             + '<datalist id="cityDatalist"><option value="Hà Nội"><option value="Hồ Chí Minh"></datalist></div>'
-            + '<div style="flex:1 1 48%"><input id="wardInput" list="wardDatalist" placeholder="Phường/Xã *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
+            + '<div style="flex:1 1 48%"><input id="wardInput" list="wardDatalist" placeholder="Ward/Commune *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6">'
             + '<datalist id="wardDatalist"></datalist></div>'
             + '</div>'
-            + '<div style="margin-top:12px"><input id="addressInput" placeholder="Địa chỉ nhận hàng *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></div>'
+            + '<div style="margin-top:12px"><input id="addressInput" placeholder="Delivery Address *" style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></div>'
             + '</div>';
 
         // Product list
-        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Sản phẩm ('+items.length+')</h3>';
-        leftHtml += '<table style="width:100%;border-collapse:collapse;margin-top:12px"><thead><tr><th style="text-align:left;padding:12px">Sản phẩm</th><th style="padding:12px">Đơn giá</th><th style="padding:12px">Số lượng</th><th style="padding:12px">Thành tiền</th></tr></thead><tbody>';
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Products ('+items.length+')</h3>';
+        leftHtml += '<table style="width:100%;border-collapse:collapse;margin-top:12px"><thead><tr><th style="text-align:left;padding:12px">Product</th><th style="padding:12px">Unit Price</th><th style="padding:12px">Quantity</th><th style="padding:12px">Total</th></tr></thead><tbody>';
         var subtotal = 0;
         items.forEach(function(it){
             var qty = it.qty || it.quantity || 1;
             var line = (it.price||0) * qty; subtotal += line;
             leftHtml += '<tr><td style="padding:12px">'+(it.img?('<img src="'+it.img+'" style="width:56px;height:56px;object-fit:cover;margin-right:8px;vertical-align:middle">'):'')+' <strong>'+it.name+'</strong></td>';
-            leftHtml += '<td style="padding:12px">'+formatVND(it.price)+'</td>';
+            leftHtml += '<td style="padding:12px">'+formatUSD(it.price)+'</td>';
             leftHtml += '<td style="padding:12px">x'+qty+'</td>';
-            leftHtml += '<td style="padding:12px">'+formatVND(line)+'</td></tr>';
+            leftHtml += '<td style="padding:12px">'+formatUSD(line)+'</td></tr>';
         });
         leftHtml += '</tbody></table></div>';
 
         // Payment methods
-        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Phương thức thanh toán</h3>'+
+        leftHtml += '<div class="checkout-card" style="margin-top:16px"><h3>Payment Method</h3>'+
             '<div style="margin-top:12px">'
-            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="cod" checked> Thanh toán khi nhận hàng</label>'
-            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="bank"> Chuyển khoản ngân hàng qua QR</label>'
+            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="cod" checked> Cash on Delivery</label>'
+            + '<label style="display:block;margin-bottom:8px"><input type="radio" name="payMethod" value="bank"> Bank transfer via QR code</label>'
             + '</div></div>';
 
         // Order note & coupon
         leftHtml += '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px">';
-        leftHtml += '<div class="checkout-card" style="flex:1 1 60%"><h3>Ghi chú đơn hàng</h3><textarea id="orderNote" placeholder="Thêm ghi chú (tùy chọn)" style="width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></textarea></div>';
-        leftHtml += '<div style="flex:1 1 35%"><div class="checkout-card"><h3>Ưu đãi</h3><div style="display:flex;gap:8px;margin-top:12px"><input id="couponCode" placeholder="Nhập mã ưu đãi" style="flex:1;padding:10px;border-radius:6px;border:1px solid #e6e6e6"><button id="applyCouponBtn" class="btn" style="padding:10px 12px">Áp dụng</button></div><div id="couponMsg" style="margin-top:8px;color:#d9534f"></div></div></div>';
+        leftHtml += '<div class="checkout-card" style="flex:1 1 60%"><h3>Order Notes</h3><textarea id="orderNote" placeholder="Add note (optional)" style="width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #e6e6e6"></textarea></div>';
+        leftHtml += '<div style="flex:1 1 35%"><div class="checkout-card"><h3>Promotions</h3><div style="display:flex;gap:8px;margin-top:12px"><input id="couponCode" placeholder="Enter promo code" style="flex:1;padding:10px;border-radius:6px;border:1px solid #e6e6e6"><button id="applyCouponBtn" class="btn" style="padding:10px 12px">Apply</button></div><div id="couponMsg" style="margin-top:8px;color:#d9534f"></div></div></div>';
         leftHtml += '</div>';
 
         area.innerHTML = leftHtml;
@@ -203,21 +203,21 @@
         if (!sumEl) return;
         var discount = calcDiscount(subtotal, subtotal, coupon);
         var total = subtotal - discount;
-        sumEl.querySelector('.summary-amount').textContent = formatVND(total);
+        sumEl.querySelector('.summary-amount').textContent = formatUSD(total);
         // show breakdown
-        sumEl.querySelector('.summary-title').textContent = 'Chi tiết thanh toán';
+        sumEl.querySelector('.summary-title').textContent = 'Payment Details';
         // create details area
         var details = sumEl.querySelector('.summary-details');
         if (!details){ details = document.createElement('div'); details.className='summary-details'; details.style.fontSize='14px'; details.style.color='#333'; details.style.marginTop='4px'; sumEl.insertBefore(details, sumEl.querySelector('.summary-actions')); }
-        details.innerHTML = '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Tổng tiền hàng</span><span>'+formatVND(subtotal)+'</span></div>' +
-                            '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Giảm</span><span>'+(discount?('-'+formatVND(discount)):'0đ')+'</span></div>' +
+        details.innerHTML = '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Tổng tiền hàng</span><span>'+formatUSD(subtotal)+'</span></div>' +
+                            '<div style="display:flex;justify-content:space-between;color:#666;margin-bottom:6px"><span>Discount</span><span>'+(discount?('-'+formatUSD(discount)):'$0')+'</span></div>' +
                             '<div style="height:1px;background:#eee;margin:8px 0"></div>' +
-                            '<div style="display:flex;justify-content:space-between;font-weight:700;color:#e74c3c"><span>Tổng tiền thanh toán</span><span>'+formatVND(total)+'</span></div>';
+                            '<div style="display:flex;justify-content:space-between;font-weight:700;color:#e74c3c"><span>Total Payment</span><span>'+formatUSD(total)+'</span></div>';
 
         // update place order button
         var btn = sumEl.querySelector('#placeOrderBtn');
         if (btn){
-            btn.textContent = 'Đặt hàng ('+ (getCheckoutItems().length) +')';
+            btn.textContent = 'Place Order ('+ (getCheckoutItems().length) +')';
             btn.onclick = function(){ submitOrder(subtotal, discount, coupon); };
         }
 
@@ -239,11 +239,11 @@
         var agree = true; // if there's a checkbox, validate here (omitted in DOM)
 
         if (!name.trim()) return alert('Vui lòng nhập tên người nhận.');
-        if (!validatePhone(phone)) return alert('Vui lòng nhập số điện thoại hợp lệ.');
+        if (!validatePhone(phone)) return alert('Please enter a valid phone number.');
         if (!city) return alert('Vui lòng chọn tỉnh/thành phố.');
         if (!ward) return alert('Vui lòng chọn phường/xã.');
         if (!addr.trim()) return alert('Vui lòng nhập địa chỉ nhận hàng.');
-        if (!pay) return alert('Vui lòng chọn phương thức thanh toán.');
+        if (!pay) return alert('Please select a payment method.');
 
         var items = getCheckoutItems();
         var order = {
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderSearchResults(results) {
         if (!searchResults) return;
         if (results.length === 0 || !searchInput.value.trim()) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
-        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">'+p.price.toLocaleString('vi-VN')+'đ</span></div>'; }).join('');
+        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">$'+((p.price/26306).toFixed(2))+'</span></div>'; }).join('');
         searchResults.style.display = 'block';
     }
     if (searchInput) {
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function(){
         searchResults.addEventListener('click', function(e){ var item = e.target.closest('.search-result-item'); if (item) { var idx = parseInt(item.getAttribute('data-idx')); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var product = products[idx]; if (product) { localStorage.setItem('currentProduct', JSON.stringify(product)); window.location.href='TheSanpham.html'; } } });
     }
 
-    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham.html'; };
+    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham_en.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham_en.html'; };
 
     var languageSelect = document.getElementById('languageSelect');
     if (languageSelect) {
@@ -319,8 +319,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Check stored language and redirect if necessary
     var storedLang = localStorage.getItem('language');
-    if (storedLang === 'en') {
-        window.location.href = 'ThanhToan_en.html';
+    if (storedLang === 'vi') {
+        window.location.href = 'ThanhToan.html';
     }
 });
 </script>

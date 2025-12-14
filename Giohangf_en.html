@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Giỏ hàng - An's Toy Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - An's Toy Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/site.js"></script>
@@ -140,7 +140,7 @@
         <div class="logo" id="logo">AN TOY'S STORE</div>
         <div style="flex:1"></div>
         <div class="search-bar">
-            <input type="text" id="siteSearchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <input type="text" id="siteSearchInput" placeholder="Search for products..." autocomplete="off">
             <div id="siteSearchResults" class="search-results" style="display:none;"></div>
         </div>
         <button class="hamburger-menu">
@@ -150,15 +150,15 @@
         </button>
         <nav>
             <ul>
-                <li><a href="Trangchu.html">Trang chủ</a></li>
-                <li><a href="TatcaSanpham.html">Sản phẩm</a></li>
-                <li><a href="Gioithieu.html">Giới thiệu</a></li>
+                <li><a href="Trangchu_en.html">Home</a></li>
+                <li><a href="TatcaSanpham_en.html">Products</a></li>
+                <li><a href="Gioithieu_en.html">About</a></li>
             </ul>
         </nav>
         <div class="language-selector">
             <select id="languageSelect">
-                <option value="vi" selected>Tiếng Việt</option>
-                <option value="en">English</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="en" selected>English</option>
             </select>
         </div>
         <div class="auth-wrap">
@@ -172,14 +172,14 @@
 <main style="max-width:1100px;margin:100px auto;padding:0 1rem;">
     <div class="page-grid">
         <div class="page-main">
-            <h1>Giỏ hàng của bạn</h1>
-            <div id="cartArea">Đang tải...</div>
+            <h1>Your Cart</h1>
+            <div id="cartArea">Loading...</div>
         </div>
         <aside class="page-aside">
             <div class="summary-card" id="cartSummary">
-                <div class="summary-title">Tạm tính</div>
-                <div class="summary-amount">0đ</div>
-                <div class="summary-actions"><button class="btn btn-primary" id="checkoutBtn">Mua hàng (0)</button></div>
+                <div class="summary-title">Total</div>
+                <div class="summary-amount">$0</div>
+                <div class="summary-actions"><button class="btn btn-primary" id="checkoutBtn">Purchases (0)</button></div>
             </div>
         </aside>
     </div>
@@ -188,22 +188,22 @@
 <footer>
     <div class="footer-content">
         <div class="footer-section">
-            <h4>Về An's Toys Store</h4>
+            <h4>About An's Toys Store</h4>
             <ul>
-                <li><a href="Gioithieu.html">Giới thiệu</a></li>
-                <li><a href="#">Chính sách</a></li>
+                <li><a href="Gioithieu_en.html">Introduction</a></li>
+                <li><a href="#">Policies</a></li>
             </ul>
         </div>
         <div class="footer-section">
-            <h4>Hỗ trợ</h4>
+            <h4>Support</h4>
             <ul>
-                <li><a href="#">Hướng dẫn mua hàng</a></li>
-                <li><a href="#">Đổi trả</a></li>
-                <li><a href="#">Liên hệ</a></li>
+                <li><a href="#">Shopping Guide</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </div>
         <div class="footer-section">
-            <h4>Theo dõi</h4>
+            <h4>Follow Us</h4>
             <ul>
                 <li><a href="#">Facebook</a></li>
                 <li><a href="#">Instagram</a></li>
@@ -219,18 +219,18 @@ function renderCart() {
     var out = '';
     var summary = '';
     if (!cart || cart.length === 0) {
-        out = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">Giỏ hàng của bạn đang trống. <a href="TatcaSanpham.html">Mua sắm ngay</a></p></div>';
+        out = '<div class="empty-card"><p style="text-align:center;padding:48px 16px">Your cart is empty. <a href="TatcaSanpham_en.html">Shop now</a></p></div>';
         document.getElementById('cartArea').innerHTML = out;
         // update summary
-        document.getElementById('cartSummary').querySelector('.summary-amount').textContent = '0đ';
-        document.getElementById('cartSummary').querySelector('#checkoutBtn').textContent = 'Mua hàng (0)';
+        document.getElementById('cartSummary').querySelector('.summary-amount').textContent = '$0';
+        document.getElementById('cartSummary').querySelector('#checkoutBtn').textContent = 'Purchases (0)';
         return;
     }
     
     var total = 0;
     
     // Desktop table layout
-    var tableOut = '<div class="cart-table-wrapper"><div class="cart-card"><table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:12px">Sản phẩm</th><th style="padding:12px">Giá</th><th style="padding:12px">Số lượng</th><th style="padding:12px">Tổng</th><th></th></tr></thead><tbody>';
+    var tableOut = '<div class="cart-table-wrapper"><div class="cart-card"><table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:12px">Product</th><th style="padding:12px">Price</th><th style="padding:12px">Quantity</th><th style="padding:12px">Total</th><th></th></tr></thead><tbody>';
     
     // Mobile/Tablet card layout
     var cardsOut = '<div class="cart-cards-wrapper">';
@@ -248,7 +248,7 @@ function renderCart() {
             + (it.img? '<img src="'+it.img+'" style="width:64px;height:64px;object-fit:cover;">':'')
             + '</div>'
             + '</td>'
-            + '<td style="padding:12px;vertical-align:middle;">'+(it.price||0).toLocaleString('vi-VN')+'đ</td>'
+            + '<td style="padding:12px;vertical-align:middle;">'+((it.price||0)/26306).toFixed(2)+'$</td>'
             + '<td style="padding:12px;vertical-align:middle;text-align:center;">'
             + '<div style="display:flex;align-items:center;justify-content:center;gap:8px;">'
             + '<button onclick="changeQty('+idx+', -1)" class="qty-btn" style="padding:8px 12px;min-width:44px;min-height:44px;">-</button>'
@@ -256,7 +256,7 @@ function renderCart() {
             + '<button onclick="changeQty('+idx+', 1)" class="qty-btn" style="padding:8px 12px;min-width:44px;min-height:44px;">+</button>'
             + '</div>'
             + '</td>'
-            + '<td style="padding:12px;vertical-align:middle;">'+line.toLocaleString('vi-VN')+'đ</td>'
+            + '<td style="padding:12px;vertical-align:middle;">'+(line/26306).toFixed(2)+'$</td>'
             + '<td style="padding:12px;vertical-align:middle;"><button onclick="removeItem('+idx+')" class="btn btn-danger">Xóa</button></td>'
             + '</tr>';
         
@@ -270,13 +270,13 @@ function renderCart() {
             + '<div class="cart-item-card-name">'+it.name+'</div>'
             + '<button onclick="removeItem('+idx+')" class="cart-item-card-remove">🗑️</button>'
             + '</div>'
-            + '<div class="cart-item-card-price">'+(it.price||0).toLocaleString('vi-VN')+'đ</div>'
+            + '<div class="cart-item-card-price">$'+((it.price||0)/26306).toFixed(2)+'</div>'
             + '<div class="cart-item-card-controls">'
             + '<button onclick="changeQty('+idx+', -1)" class="qty-btn-mobile">−</button>'
             + '<input type="number" id="qty_'+idx+'" value="'+qty+'" min="1" class="qty-input-mobile">'
             + '<button onclick="changeQty('+idx+', 1)" class="qty-btn-mobile">+</button>'
             + '</div>'
-            + '<div class="cart-item-card-total">Tổng: '+line.toLocaleString('vi-VN')+'đ</div>'
+            + '<div class="cart-item-card-total">Total: $'+(line/26306).toFixed(2)+'</div>'
             + '</div>'
             + '</div>';
     });
@@ -289,11 +289,11 @@ function renderCart() {
     // update summary card
     var sumEl = document.getElementById('cartSummary');
     if (sumEl) {
-        sumEl.querySelector('.summary-amount').textContent = total.toLocaleString('vi-VN') + 'đ';
+        sumEl.querySelector('.summary-amount').textContent = '$' + (total/26306).toFixed(2);
         var btn = sumEl.querySelector('#checkoutBtn');
-        if (btn) btn.textContent = 'Mua hàng ('+cart.length+')';
+        if (btn) btn.textContent = 'Purchases ('+cart.length+')';
         // wire checkout button
-        btn.onclick = function(){ localStorage.setItem('checkoutCart', JSON.stringify(cart)); window.location.href = 'ThanhToan.html'; };
+        btn.onclick = function(){ localStorage.setItem('checkoutCart', JSON.stringify(cart)); window.location.href = 'ThanhToan_en.html'; };
     }
 }
 
@@ -320,7 +320,7 @@ function removeItem(idx){
 
 function proceedCheckout(){
     var cart = (window.SITE && SITE.getCart) ? SITE.getCart() : JSON.parse(localStorage.getItem('cartItems')||'[]');
-    if (!cart || cart.length===0) return alert('Giỏ hàng trống');
+    if (!cart || cart.length===0) return alert('Cart is empty');
     localStorage.setItem('checkoutCart', JSON.stringify(cart));
     window.location.href = 'ThanhToan.html';
 }
@@ -346,15 +346,15 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderSearchResults(results) {
         if (!searchResults) return;
         if (results.length === 0 || !searchInput.value.trim()) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
-        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">'+p.price.toLocaleString('vi-VN')+'đ</span></div>'; }).join('');
+        searchResults.innerHTML = results.map(function(p, idx){ return '<div class="search-result-item" data-idx="'+idx+'"><img src="'+p.img+'" style="width:32px;height:32px;object-fit:cover;margin-right:8px;vertical-align:middle">'+p.name+'<span style="float:right;color:#007bff;font-weight:700">$'+((p.price/26306).toFixed(2))+'</span></div>'; }).join('');
         searchResults.style.display = 'block';
     }
     if (searchInput) {
         searchInput.addEventListener('input', function(){ var val = searchInput.value.trim().toLowerCase(); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var results = products.filter(function(p){ return p.name.toLowerCase().includes(val); }); renderSearchResults(results); });
         document.addEventListener('click', function(e){ if (!searchResults.contains(e.target) && e.target !== searchInput) { searchResults.style.display='none'; } });
-        searchResults.addEventListener('click', function(e){ var item = e.target.closest('.search-result-item'); if (item) { var idx = parseInt(item.getAttribute('data-idx')); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var product = products[idx]; if (product) { localStorage.setItem('currentProduct', JSON.stringify(product)); window.location.href='TheSanpham.html'; } } });
+        searchResults.addEventListener('click', function(e){ var item = e.target.closest('.search-result-item'); if (item) { var idx = parseInt(item.getAttribute('data-idx')); var products = window.SITE && SITE.demoProducts ? SITE.demoProducts : []; var product = products[idx]; if (product) { localStorage.setItem('currentProduct', JSON.stringify(product)); window.location.href='TheSanpham_en.html'; } } });
     }
-    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham.html'; };
+    var allProductsMenu = document.querySelector('nav ul li a[href="TatcaSanpham_en.html"]'); if (allProductsMenu) allProductsMenu.onclick = function(e){ e.preventDefault(); window.location.href='TatcaSanpham_en.html'; };
 
     var languageSelect = document.getElementById('languageSelect');
     if (languageSelect) {
@@ -371,8 +371,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Check stored language and redirect if necessary
     var storedLang = localStorage.getItem('language');
-    if (storedLang === 'en') {
-        window.location.href = 'Giohangf_en.html';
+    if (storedLang === 'vi') {
+        window.location.href = 'Giohangf.html';
     }
 });
 </script>
